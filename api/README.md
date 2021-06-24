@@ -2,6 +2,8 @@
 
 Take home project, built by [Matt Carter](mailto:matt@mattcarter.io) stands up both a REST and Graphql API
 
+[![Build](https://github.com/TechnotronicOz/wisely-nest-api/actions/workflows/ci.yml/badge.svg)](https://github.com/TechnotronicOz/wisely-nest-api/actions/workflows/ci.yml)
+
 ## Installation
 
 ```bash
