@@ -1,0 +1,701 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type DeleteManyResponse {
+    "The number of records deleted."
+    deletedCount: Int!
+}
+
+type Inventory {
+    created: DateTime!
+    date: String!
+    id: Int!
+    limit: Float!
+    restaurant: Restaurant!
+    restaurantId: Float!
+    time: String!
+    updated: DateTime!
+}
+
+type InventoryAggregateGroupBy {
+    date: String
+    id: Int
+    limit: Float
+    restaurantId: Float
+    time: String
+}
+
+type InventoryAvgAggregate {
+    id: Float
+    limit: Float
+    restaurantId: Float
+}
+
+type InventoryConnection {
+    "Array of edges."
+    edges: [InventoryEdge!]!
+    "Paging information"
+    pageInfo: PageInfo!
+}
+
+type InventoryCountAggregate {
+    date: Int
+    id: Int
+    limit: Int
+    restaurantId: Int
+    time: Int
+}
+
+type InventoryDeleteResponse {
+    created: DateTime
+    date: String
+    id: Int
+    limit: Float
+    restaurantId: Float
+    time: String
+    updated: DateTime
+}
+
+type InventoryEdge {
+    "Cursor for this node."
+    cursor: ConnectionCursor!
+    "The node containing the Inventory"
+    node: Inventory!
+}
+
+type InventoryMaxAggregate {
+    date: String
+    id: Int
+    limit: Float
+    restaurantId: Float
+    time: String
+}
+
+type InventoryMinAggregate {
+    date: String
+    id: Int
+    limit: Float
+    restaurantId: Float
+    time: String
+}
+
+type InventorySumAggregate {
+    id: Float
+    limit: Float
+    restaurantId: Float
+}
+
+type Mutation {
+    bookNew(date: String!, limit: Float!, restaurantId: Float!, time: String!): InventoryConnection!
+    createManyInventories(input: CreateManyInventoriesInput!): [Inventory!]!
+    createManyReservations(input: CreateManyReservationsInput!): [Reservation!]!
+    createManyRestaurants(input: CreateManyRestaurantsInput!): [Restaurant!]!
+    createOneInventory(input: CreateOneInventoryInput!): Inventory!
+    createOneReservation(input: CreateOneReservationInput!): Reservation!
+    createOneRestaurant(input: CreateOneRestaurantInput!): Restaurant!
+    deleteManyInventories(input: DeleteManyInventoriesInput!): DeleteManyResponse!
+    deleteManyReservations(input: DeleteManyReservationsInput!): DeleteManyResponse!
+    deleteManyRestaurants(input: DeleteManyRestaurantsInput!): DeleteManyResponse!
+    deleteOneInventory(input: DeleteOneInventoryInput!): InventoryDeleteResponse!
+    deleteOneReservation(input: DeleteOneReservationInput!): ReservationDeleteResponse!
+    deleteOneRestaurant(input: DeleteOneRestaurantInput!): RestaurantDeleteResponse!
+    setInventoryOnReservation(input: SetInventoryOnReservationInput!): Reservation!
+    setRestaurantOnInventory(input: SetRestaurantOnInventoryInput!): Inventory!
+    updateManyInventories(input: UpdateManyInventoriesInput!): UpdateManyResponse!
+    updateManyReservations(input: UpdateManyReservationsInput!): UpdateManyResponse!
+    updateManyRestaurants(input: UpdateManyRestaurantsInput!): UpdateManyResponse!
+    updateOneInventory(input: UpdateOneInventoryInput!): Inventory!
+    updateOneReservation(input: UpdateOneReservationInput!): Reservation!
+    updateOneRestaurant(input: UpdateOneRestaurantInput!): Restaurant!
+}
+
+type PageInfo {
+    "The cursor of the last returned record."
+    endCursor: ConnectionCursor
+    "true if paging forward and there are more records."
+    hasNextPage: Boolean
+    "true if paging backwards and there are more records."
+    hasPreviousPage: Boolean
+    "The cursor of the first returned record."
+    startCursor: ConnectionCursor
+}
+
+type Query {
+    inventories(
+        "Specify to filter the records returned."
+        filter: InventoryFilter = {},
+        "Limit or page results."
+        paging: CursorPaging = {first : 10},
+        "Specify to sort results."
+        sorting: [InventorySort!] = []
+    ): InventoryConnection!
+    inventory(
+        "The id of the record to find."
+        id: Int!
+    ): Inventory
+    reservation(
+        "The id of the record to find."
+        id: Int!
+    ): Reservation
+    reservations(
+        "Specify to filter the records returned."
+        filter: ReservationFilter = {},
+        "Limit or page results."
+        paging: CursorPaging = {first : 10},
+        "Specify to sort results."
+        sorting: [ReservationSort!] = []
+    ): ReservationConnection!
+    restaurant(
+        "The id of the record to find."
+        id: Int!
+    ): Restaurant
+    restaurants(
+        "Specify to filter the records returned."
+        filter: RestaurantFilter = {},
+        "Limit or page results."
+        paging: CursorPaging = {first : 10},
+        "Specify to sort results."
+        sorting: [RestaurantSort!] = []
+    ): RestaurantConnection!
+}
+
+type Reservation {
+    created: DateTime!
+    id: Int!
+    inventory: Inventory!
+    inventoryId: Float!
+    restaurantId: Float!
+    size: Float!
+    updated: DateTime!
+    user: String!
+}
+
+type ReservationAggregateGroupBy {
+    id: Int
+    inventoryId: Float
+    restaurantId: Float
+    size: Float
+    user: String
+}
+
+type ReservationAvgAggregate {
+    id: Float
+    inventoryId: Float
+    restaurantId: Float
+    size: Float
+}
+
+type ReservationConnection {
+    "Array of edges."
+    edges: [ReservationEdge!]!
+    "Paging information"
+    pageInfo: PageInfo!
+}
+
+type ReservationCountAggregate {
+    id: Int
+    inventoryId: Int
+    restaurantId: Int
+    size: Int
+    user: Int
+}
+
+type ReservationDeleteResponse {
+    created: DateTime
+    id: Int
+    inventoryId: Float
+    restaurantId: Float
+    size: Float
+    updated: DateTime
+    user: String
+}
+
+type ReservationEdge {
+    "Cursor for this node."
+    cursor: ConnectionCursor!
+    "The node containing the Reservation"
+    node: Reservation!
+}
+
+type ReservationMaxAggregate {
+    id: Int
+    inventoryId: Float
+    restaurantId: Float
+    size: Float
+    user: String
+}
+
+type ReservationMinAggregate {
+    id: Int
+    inventoryId: Float
+    restaurantId: Float
+    size: Float
+    user: String
+}
+
+type ReservationSumAggregate {
+    id: Float
+    inventoryId: Float
+    restaurantId: Float
+    size: Float
+}
+
+type Restaurant {
+    created: DateTime!
+    id: Int!
+    location: String!
+    name: String!
+    timezone: String!
+    updated: DateTime!
+}
+
+type RestaurantAggregateGroupBy {
+    id: Int
+    location: String
+    name: String
+    timezone: String
+}
+
+type RestaurantAvgAggregate {
+    id: Float
+}
+
+type RestaurantConnection {
+    "Array of edges."
+    edges: [RestaurantEdge!]!
+    "Paging information"
+    pageInfo: PageInfo!
+}
+
+type RestaurantCountAggregate {
+    id: Int
+    location: Int
+    name: Int
+    timezone: Int
+}
+
+type RestaurantDeleteResponse {
+    created: DateTime
+    id: Int
+    location: String
+    name: String
+    timezone: String
+    updated: DateTime
+}
+
+type RestaurantEdge {
+    "Cursor for this node."
+    cursor: ConnectionCursor!
+    "The node containing the Restaurant"
+    node: Restaurant!
+}
+
+type RestaurantMaxAggregate {
+    id: Int
+    location: String
+    name: String
+    timezone: String
+}
+
+type RestaurantMinAggregate {
+    id: Int
+    location: String
+    name: String
+    timezone: String
+}
+
+type RestaurantSumAggregate {
+    id: Float
+}
+
+type UpdateManyResponse {
+    "The number of records updated."
+    updatedCount: Int!
+}
+
+enum InventorySortFields {
+    date
+    id
+    limit
+    restaurantId
+    time
+}
+
+enum ReservationSortFields {
+    id
+    inventoryId
+    restaurantId
+    size
+    user
+}
+
+enum RestaurantSortFields {
+    id
+    location
+    name
+    timezone
+}
+
+"Sort Directions"
+enum SortDirection {
+    ASC
+    DESC
+}
+
+"Sort Nulls Options"
+enum SortNulls {
+    NULLS_FIRST
+    NULLS_LAST
+}
+
+input CreateManyInventoriesInput {
+    "Array of records to create"
+    inventories: [InventoryInput!]!
+}
+
+input CreateManyReservationsInput {
+    "Array of records to create"
+    reservations: [ReservationInput!]!
+}
+
+input CreateManyRestaurantsInput {
+    "Array of records to create"
+    restaurants: [CreateRestaurant!]!
+}
+
+input CreateOneInventoryInput {
+    "The record to create"
+    inventory: InventoryInput!
+}
+
+input CreateOneReservationInput {
+    "The record to create"
+    reservation: ReservationInput!
+}
+
+input CreateOneRestaurantInput {
+    "The record to create"
+    restaurant: CreateRestaurant!
+}
+
+input CreateRestaurant {
+    created: DateTime
+    id: Int
+    location: String
+    name: String
+    timezone: String
+    updated: DateTime
+}
+
+input CursorPaging {
+    "Paginate after opaque cursor"
+    after: ConnectionCursor
+    "Paginate before opaque cursor"
+    before: ConnectionCursor
+    "Paginate first"
+    first: Int
+    "Paginate last"
+    last: Int
+}
+
+input DeleteManyInventoriesInput {
+    "Filter to find records to delete"
+    filter: InventoryDeleteFilter!
+}
+
+input DeleteManyReservationsInput {
+    "Filter to find records to delete"
+    filter: ReservationDeleteFilter!
+}
+
+input DeleteManyRestaurantsInput {
+    "Filter to find records to delete"
+    filter: RestaurantDeleteFilter!
+}
+
+input DeleteOneInventoryInput {
+    "The id of the record to delete."
+    id: Int!
+}
+
+input DeleteOneReservationInput {
+    "The id of the record to delete."
+    id: Int!
+}
+
+input DeleteOneRestaurantInput {
+    "The id of the record to delete."
+    id: Int!
+}
+
+input IntFieldComparison {
+    between: IntFieldComparisonBetween
+    eq: Int
+    gt: Int
+    gte: Int
+    in: [Int!]
+    is: Boolean
+    isNot: Boolean
+    lt: Int
+    lte: Int
+    neq: Int
+    notBetween: IntFieldComparisonBetween
+    notIn: [Int!]
+}
+
+input IntFieldComparisonBetween {
+    lower: Int!
+    upper: Int!
+}
+
+input InventoryDeleteFilter {
+    and: [InventoryDeleteFilter!]
+    date: StringFieldComparison
+    id: IntFieldComparison
+    limit: NumberFieldComparison
+    or: [InventoryDeleteFilter!]
+    restaurantId: NumberFieldComparison
+    time: StringFieldComparison
+}
+
+input InventoryFilter {
+    and: [InventoryFilter!]
+    date: StringFieldComparison
+    id: IntFieldComparison
+    limit: NumberFieldComparison
+    or: [InventoryFilter!]
+    restaurant: InventoryFilterRestaurantFilter
+    restaurantId: NumberFieldComparison
+    time: StringFieldComparison
+}
+
+input InventoryFilterRestaurantFilter {
+    and: [InventoryFilterRestaurantFilter!]
+    id: IntFieldComparison
+    location: StringFieldComparison
+    name: StringFieldComparison
+    or: [InventoryFilterRestaurantFilter!]
+    timezone: StringFieldComparison
+}
+
+input InventoryInput {
+    date: String!
+    limit: Float!
+    restaurantId: Float!
+    time: String!
+}
+
+input InventorySort {
+    direction: SortDirection!
+    field: InventorySortFields!
+    nulls: SortNulls
+}
+
+input InventoryUpdateFilter {
+    and: [InventoryUpdateFilter!]
+    date: StringFieldComparison
+    id: IntFieldComparison
+    limit: NumberFieldComparison
+    or: [InventoryUpdateFilter!]
+    restaurantId: NumberFieldComparison
+    time: StringFieldComparison
+}
+
+input NumberFieldComparison {
+    between: NumberFieldComparisonBetween
+    eq: Float
+    gt: Float
+    gte: Float
+    in: [Float!]
+    is: Boolean
+    isNot: Boolean
+    lt: Float
+    lte: Float
+    neq: Float
+    notBetween: NumberFieldComparisonBetween
+    notIn: [Float!]
+}
+
+input NumberFieldComparisonBetween {
+    lower: Float!
+    upper: Float!
+}
+
+input ReservationDeleteFilter {
+    and: [ReservationDeleteFilter!]
+    id: IntFieldComparison
+    inventoryId: NumberFieldComparison
+    or: [ReservationDeleteFilter!]
+    restaurantId: NumberFieldComparison
+    size: NumberFieldComparison
+    user: StringFieldComparison
+}
+
+input ReservationFilter {
+    and: [ReservationFilter!]
+    id: IntFieldComparison
+    inventory: ReservationFilterInventoryFilter
+    inventoryId: NumberFieldComparison
+    or: [ReservationFilter!]
+    restaurantId: NumberFieldComparison
+    size: NumberFieldComparison
+    user: StringFieldComparison
+}
+
+input ReservationFilterInventoryFilter {
+    and: [ReservationFilterInventoryFilter!]
+    date: StringFieldComparison
+    id: IntFieldComparison
+    limit: NumberFieldComparison
+    or: [ReservationFilterInventoryFilter!]
+    restaurantId: NumberFieldComparison
+    time: StringFieldComparison
+}
+
+input ReservationInput {
+    inventoryId: Float!
+    size: Float!
+    user: String!
+}
+
+input ReservationSort {
+    direction: SortDirection!
+    field: ReservationSortFields!
+    nulls: SortNulls
+}
+
+input ReservationUpdateFilter {
+    and: [ReservationUpdateFilter!]
+    id: IntFieldComparison
+    inventoryId: NumberFieldComparison
+    or: [ReservationUpdateFilter!]
+    restaurantId: NumberFieldComparison
+    size: NumberFieldComparison
+    user: StringFieldComparison
+}
+
+input RestaurantDeleteFilter {
+    and: [RestaurantDeleteFilter!]
+    id: IntFieldComparison
+    location: StringFieldComparison
+    name: StringFieldComparison
+    or: [RestaurantDeleteFilter!]
+    timezone: StringFieldComparison
+}
+
+input RestaurantFilter {
+    and: [RestaurantFilter!]
+    id: IntFieldComparison
+    location: StringFieldComparison
+    name: StringFieldComparison
+    or: [RestaurantFilter!]
+    timezone: StringFieldComparison
+}
+
+input RestaurantSort {
+    direction: SortDirection!
+    field: RestaurantSortFields!
+    nulls: SortNulls
+}
+
+input RestaurantUpdateFilter {
+    and: [RestaurantUpdateFilter!]
+    id: IntFieldComparison
+    location: StringFieldComparison
+    name: StringFieldComparison
+    or: [RestaurantUpdateFilter!]
+    timezone: StringFieldComparison
+}
+
+input SetInventoryOnReservationInput {
+    "The id of the record."
+    id: Int!
+    "The id of relation."
+    relationId: Int!
+}
+
+input SetRestaurantOnInventoryInput {
+    "The id of the record."
+    id: Int!
+    "The id of relation."
+    relationId: Int!
+}
+
+input StringFieldComparison {
+    eq: String
+    gt: String
+    gte: String
+    iLike: String
+    in: [String!]
+    is: Boolean
+    isNot: Boolean
+    like: String
+    lt: String
+    lte: String
+    neq: String
+    notILike: String
+    notIn: [String!]
+    notLike: String
+}
+
+input UpdateManyInventoriesInput {
+    "Filter used to find fields to update"
+    filter: InventoryUpdateFilter!
+    "The update to apply to all records found using the filter"
+    update: InventoryInput!
+}
+
+input UpdateManyReservationsInput {
+    "Filter used to find fields to update"
+    filter: ReservationUpdateFilter!
+    "The update to apply to all records found using the filter"
+    update: ReservationInput!
+}
+
+input UpdateManyRestaurantsInput {
+    "Filter used to find fields to update"
+    filter: RestaurantUpdateFilter!
+    "The update to apply to all records found using the filter"
+    update: UpdateRestaurant!
+}
+
+input UpdateOneInventoryInput {
+    "The id of the record to update"
+    id: Int!
+    "The update to apply."
+    update: InventoryInput!
+}
+
+input UpdateOneReservationInput {
+    "The id of the record to update"
+    id: Int!
+    "The update to apply."
+    update: ReservationInput!
+}
+
+input UpdateOneRestaurantInput {
+    "The id of the record to update"
+    id: Int!
+    "The update to apply."
+    update: UpdateRestaurant!
+}
+
+input UpdateRestaurant {
+    created: DateTime
+    id: Int
+    location: String
+    name: String
+    timezone: String
+    updated: DateTime
+}
+
+
+"A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format."
+scalar DateTime
+
+"Cursor for paging through collections"
+scalar ConnectionCursor
