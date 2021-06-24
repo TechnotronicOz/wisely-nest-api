@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { InventoryService } from './inventory.service';
-import { InventoryController } from './inventory.controller';
 import { NestjsQueryGraphQLModule } from '@nestjs-query/query-graphql';
 import { NestjsQueryTypeOrmModule } from '@nestjs-query/query-typeorm';
 import { InventoryEntity } from './inventory.entity';
@@ -27,7 +26,6 @@ import { InventoryResolver } from './inventory.resolver';
     RestaurantModule,
   ],
   providers: [InventoryService, InventoryResolver],
-  controllers: [InventoryController],
   exports: [InventoryEntity, InventoryService],
 })
 export class InventoryModule {}

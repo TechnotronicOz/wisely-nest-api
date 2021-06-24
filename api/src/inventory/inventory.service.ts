@@ -59,14 +59,4 @@ export class InventoryService extends TypeOrmQueryService<InventoryEntity> {
     });
     return this.repo.create(inventory);
   }
-
-  findByDate(restaurantId: number, date: string): Promise<InventoryEntity[]> {
-    return this.query({
-      filter: {
-        date: { eq: date },
-        restaurantId: { eq: restaurantId },
-      },
-      sorting: [{ field: 'time', direction: SortDirection.ASC }],
-    });
-  }
 }

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ReservationService } from './reservation.service';
-import { ReservationController } from './reservation.controller';
 import { NestjsQueryGraphQLModule } from '@nestjs-query/query-graphql';
 import { NestjsQueryTypeOrmModule } from '@nestjs-query/query-typeorm';
 import { ReservationEntity } from './reservation.entity';
 import { ReservationDTO } from './dto/reservation.dto';
 import { ReservationInputDTO } from './dto/reservation.input.dto';
+import { ReservationResolver } from './reservation.resolver';
 
 @Module({
   imports: [
@@ -23,8 +23,7 @@ import { ReservationInputDTO } from './dto/reservation.input.dto';
       ],
     }),
   ],
-  providers: [ReservationService],
-  controllers: [ReservationController],
+  providers: [ReservationService, ReservationResolver],
   exports: [ReservationEntity, ReservationService],
 })
 export class ReservationModule {}

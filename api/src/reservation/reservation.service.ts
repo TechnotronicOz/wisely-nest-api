@@ -5,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ReservationInputDTO } from './dto/reservation.input.dto';
 import { newBadRequestException } from '../util/exceptions';
-import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class ReservationService extends TypeOrmQueryService<ReservationEntity> {
@@ -54,10 +53,6 @@ export class ReservationService extends TypeOrmQueryService<ReservationEntity> {
     }
 
     this.logger.log(`creating reservation [${JSON.stringify(createDto)}]`);
-    // const res = plainToClass(ReservationEntity, {
-    //   ...createDto,
-    //   created: new Date(),
-    // });
     return this.reservationRepo.create({
       ...createDto,
       created: new Date(),

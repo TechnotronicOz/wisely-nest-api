@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
-import { RestaurantController } from './restaurant.controller';
 import { NestjsQueryGraphQLModule } from '@nestjs-query/query-graphql';
 import { NestjsQueryTypeOrmModule } from '@nestjs-query/query-typeorm';
 import { RestaurantEntity } from './restaurant.entity';
@@ -19,7 +18,6 @@ import { RestaurantDTO } from './dto/restaurant.dto';
     }),
   ],
   providers: [RestaurantService, RestaurantEntity],
-  controllers: [RestaurantController],
   exports: [RestaurantEntity, RestaurantService],
 })
 export class RestaurantModule {}
