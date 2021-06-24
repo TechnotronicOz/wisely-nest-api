@@ -57,26 +57,29 @@ describe('IsCustomTime Validator', () => {
       IsCustomTimeConstraint:
         'time must match the ISO8601 date part standard, yyyy-MM-dd',
     };
+    const expectedErr2 = {
+      IsCustomTimeConstraint: 'time must be on a 15 min interval',
+    };
 
     const m = new MyClass();
     m.myTime = '3:00pm';
     const res: ValidationError[] = await validator.validate(m);
     expect(res.length).toEqual(1);
-    expect(res[0].constraints).toEqual(expectedErr);
+    expect(res[0].constraints).toEqual(expectedErr2);
 
     m.myTime = '14:23:05';
     const res2: ValidationError[] = await validator.validate(m);
     expect(res2.length).toEqual(1);
-    expect(res2[0].constraints).toEqual(expectedErr);
+    expect(res2[0].constraints).toEqual(expectedErr2);
 
     m.myTime = '18:22:05.001';
     const res3: ValidationError[] = await validator.validate(m);
     expect(res3.length).toEqual(1);
-    expect(res3[0].constraints).toEqual(expectedErr);
+    expect(res3[0].constraints).toEqual(expectedErr2);
 
     m.myTime = 'random string';
     const res4: ValidationError[] = await validator.validate(m);
     expect(res4.length).toEqual(1);
-    expect(res4[0].constraints).toEqual(expectedErr);
+    expect(res4[0].constraints).toEqual(expectedErr2);
   });
 });
