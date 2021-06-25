@@ -6,67 +6,43 @@
 	},
 	"item": [
 		{
-			"name": "Create Reservation",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"user\": \"matt@mattcarter.io\",\n    \"size\": 5,\n    \"time\": \"15:00\",\n    \"date\": \"2021-06-20\",\n    \"restaurantId\": 1\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/reservation",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"reservation"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create Restaurant",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "graphql",
-					"graphql": {
-						"query": "mutation {\n  createOneRestaurant(input:{\n    restaurant:{\n      name: \"Matt's Place\",\n      location: \"Kansas City, MO\"\n      created: \"2021-06-19 00:00:00Z\"\n    }\n  }) {\n    id\n  }\n}",
-						"variables": ""
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/graphql",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"graphql"
-					]
-				}
-			},
-			"response": [
+			"name": "Restaurant",
+			"item": [
 				{
-					"name": "Create Restaurant",
-					"originalRequest": {
+					"name": "Create One Restaurant",
+					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation {\n  createOneRestaurant(input:{\n    restaurant:{\n      name: \"Matt's Place\",\n      location: \"Kansas City, MO\"\n      created: \"2021-06-19 00:00:00Z\"\n    }\n  }) {\n    id\n  }\n}",
+								"query": "mutation {\n  createOneRestaurant(input:{\n    restaurant:{\n      name: \"Matt's Place\",\n      location: \"Kansas City, MO\",\n      created: \"2021-06-19 00:00:00Z\",\n      timezone: \"America/Central\",\n    }\n  }) {\n    id\n  }\n}",
+								"variables": "{\n    \"restaurant\": {\n        \"name\": \"Matt's Place\",\n        \"city\": \"Kansas City, MO\",\n        \"created\": \"2021-06-19 00:00:00Z\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update One Restaurant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n    updateOneRestaurant(input: {\n        id: 1,\n        update: {\n            location: \"North Kansas City, MO\"\n        }\n    }) {\n        id,\n        name,\n        location,\n        timezone\n    }\n}",
 								"variables": ""
 							}
 						},
@@ -82,41 +58,133 @@
 							]
 						}
 					},
-					"_postman_previewlanguage": null,
-					"header": null,
-					"cookie": [],
-					"body": null
+					"response": []
+				},
+				{
+					"name": "Delete One Restaurant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n    deleteOneRestaurant(input: {\n        id: 3\n    }) {\n        id\n    }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
-			"name": "New Request",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"limit\": 10,\n    \"time\": \"2021-06-20 15:00:00Z\",\n    \"date\": \"2021-06-20 15:00:00Z\",\n    \"restaurantId\": 1\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Inventory",
+			"item": [
+				{
+					"name": "Create Inventory",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  createManyInventories(createInputData: [\n    {\n      restaurantId: 1,\n      date: \"2021-06-22\",\n      time: \"15:00\"\n      limit: 10\n    },\n    {\n      restaurantId: 1,\n      date: \"2021-06-22\",\n      time: \"15:15\",\n      limit: 5\n    },\n    {\n      restaurantId: 1,\n      date: \"2021-06-22\",\n      time: \"15:30\",\n      limit: 5\n    },\n    {\n      restaurantId: 1,\n      date: \"2021-06-22\",\n      time: \"15:45\",\n      limit: 5\n    },\n    {\n      restaurantId: 1,\n      date: \"2021-06-22\",\n      time: \"16:00\",\n      limit: 5\n    },\n    {\n      restaurantId: 1,\n      date: \"2021-06-22\",\n      time: \"16:15\",\n      limit: 2, \n    },\n    {\n      restaurantId: 1,\n      date: \"2021-06-22\",\n      time: \"16:30\",\n      limit: 5,\n    },\n    {\n      restaurantId: 1,\n      date: \"2021-06-22\",\n      time: \"16:45\",\n      limit:5,\n    },\n    {\n      restaurantId: 1,\n      date: \"2021-06-22\",\n      time: \"17:00\",\n      limit: 5\n    }\n  ]) {\n    id,\n    date,\n    time,\n    limit\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"graphql"
+							]
 						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/inventory/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"inventory",
-						""
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "Reservation",
+			"item": [
+				{
+					"name": "Create Reservation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  createOneReservation(createInputData: {\n    restaurantId: 1,\n    inventoryId: 1,\n    user: \"matt@mattcarter.io\",\n    size: 2,\n  }) {\n    id\n  }\n}",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/reservation",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reservation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete One Reservation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  deleteOneReservation(input: {\n    id: 1\n  }) {\n    id\n  }\n}",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/reservation",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reservation"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

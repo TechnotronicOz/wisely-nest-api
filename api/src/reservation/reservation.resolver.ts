@@ -18,6 +18,6 @@ export class ReservationResolver {
     this.logger.log(
       `creating one reservation [${JSON.stringify(createInputData)}]`,
     );
-    return this.reservationService.create(createInputData);
+    return this.reservationService.createOne(createInputData);
   }
 }

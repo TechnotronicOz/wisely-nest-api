@@ -1,4 +1,4 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, ID, InputType, Int } from '@nestjs/graphql';
 import { IsNumber, IsString } from 'class-validator';
 import { CreateManyInputType, Relation } from '@nestjs-query/query-graphql';
 import { RestaurantDTO } from '../../restaurant/dto/restaurant.dto';
@@ -8,17 +8,17 @@ import { IsCustomDate } from '../../common/date.validator';
 @InputType('InventoryInput')
 @Relation('restaurant', () => RestaurantDTO, { disableRemove: true })
 export class InventoryInputDTO {
-  @Field(() => Int)
+  @Field(() => ID)
   @IsNumber()
   limit!: number;
 
   @IsString()
-  @Field()
+  @Field(() => String)
   @IsCustomTime()
   time!: string;
 
   @IsString()
-  @Field()
+  @Field(() => String)
   @IsCustomDate()
   date!: string;
 
@@ -26,9 +26,3 @@ export class InventoryInputDTO {
   @IsNumber()
   restaurantId!: number;
 }
-
-@InputType('InventoryInputs')
-export class CreateManyInventoriesInput extends CreateManyInputType(
-  'inventories',
-  InventoryInputDTO,
-) {}

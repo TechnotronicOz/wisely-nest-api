@@ -6,9 +6,11 @@ import { ReservationEntity } from './reservation.entity';
 import { ReservationDTO } from './dto/reservation.dto';
 import { ReservationInputDTO } from './dto/reservation.input.dto';
 import { ReservationResolver } from './reservation.resolver';
+import { InventoryModule } from '../inventory/inventory.module';
 
 @Module({
   imports: [
+    InventoryModule,
     NestjsQueryGraphQLModule.forFeature({
       imports: [NestjsQueryTypeOrmModule.forFeature([ReservationEntity])],
       resolvers: [

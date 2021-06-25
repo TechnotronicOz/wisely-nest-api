@@ -2,10 +2,7 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { InventoryDTO } from './dto/inventory.dto';
 import { InventoryEntity } from './inventory.entity';
 import { InventoryService } from './inventory.service';
-import {
-  CreateManyInventoriesInput,
-  InventoryInputDTO,
-} from './dto/inventory.input.dto';
+import { InventoryInputDTO } from './dto/inventory.input.dto';
 import { Logger } from '@nestjs/common';
 
 @Resolver(() => InventoryDTO)
@@ -24,13 +21,12 @@ export class InventoryResolver {
     return this.inventoryService.create(createInputData);
   }
 
-  // todo: why won't this work?
-  // @Mutation(() => [InventoryDTO])
-  // async createMultipleInventories(
-  //   @Args({ type: () => [InventoryInputDTO] })
-  //   createInputData: InventoryInputDTO[],
-  // ): Promise<InventoryEntity[]> {
-  //   this.logger.log(`creating many inventory [${createInputData.length}]`);
-  //   return this.inventoryService.createMany(createInputData);
-  // }
+  @Mutation(() => [InventoryDTO])
+  async createManyInventories(
+    @Args({ name: 'createInputData', type: () => [InventoryInputDTO] })
+    createInputData: InventoryInputDTO[],
+  ): Promise<InventoryEntity[]> {
+    this.logger.log(`creating many inventory [${createInputData.length}]`);
+    return this.inventoryService.createMany(createInputData);
+  }
 }

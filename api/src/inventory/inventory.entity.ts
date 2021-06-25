@@ -13,7 +13,7 @@ import { ReservationEntity } from '../reservation/reservation.entity';
 @Entity()
 export class InventoryEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  id!: number;
+  id?: number;
 
   @Column({ nullable: false })
   limit!: number;
