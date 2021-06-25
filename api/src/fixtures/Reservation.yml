@@ -1,0 +1,9 @@
+entity: Reservation
+items:
+  reservation1:
+    user: '{{ internet.email }}'
+    size: '{{ datatype.number }}'
+    restaurant: '@restaurant1'
+    inventory: '@inventory1'
+  reservation2:
+

@@ -2,7 +2,6 @@ import {
   FilterableField,
   FilterableRelation,
   IDField,
-  Relation,
 } from '@nestjs-query/query-graphql';
 import { ObjectType, GraphQLISODateTime, Field, Int } from '@nestjs/graphql';
 import { RestaurantDTO } from '../../restaurant/dto/restaurant.dto';
@@ -31,3 +30,4 @@ export class InventoryDTO {
   @Field(() => GraphQLISODateTime)
   updated?: Date;
 }
+

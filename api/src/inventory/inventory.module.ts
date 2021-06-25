@@ -25,7 +25,7 @@ import { InventoryResolver } from './inventory.resolver';
     }),
     RestaurantModule,
   ],
-  providers: [InventoryService, InventoryResolver],
+  providers: [InventoryService, InventoryResolver, InventoryEntity],
   exports: [InventoryEntity, InventoryService],
 })
 export class InventoryModule {}

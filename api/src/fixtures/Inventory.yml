@@ -1,0 +1,102 @@
+entity: Inventory
+items:
+  inventory1:
+    restaurant: '@restaurant1'
+    date: <%= new Date() %>
+    time: "16:00"
+    limit: 10
+  inventory2:
+    restaurant: '@restaurant1'
+    date: <%= new Date() %>
+    time: "16:15"
+    limit: 5
+  inventory3:
+    restaurant: '@restaurant1'
+    date: <%= new Date() %>
+    time: "16:30"
+    limit: 5
+  inventory4:
+    restaurant: '@restaurant1'
+    date: <%= new Date() %>
+    time: "16:45"
+    limit: 5
+  inventory5:
+    restaurant: '@restaurant1'
+    date: <%= new Date() %>
+    time: "17:00"
+    limit: 5
+  inventory6:
+    restaurant: '@restaurant1'
+    date: <%= new Date() %>
+    time: "17:15"
+    limit: 5
+  inventory7:
+    restaurant: '@restaurant1'
+    date: <%= new Date() %>
+    time: "17:30"
+    limit: 5
+  inventory8:
+    restaurant: '@restaurant1'
+    date: <%= new Date() %>
+    time: "17:45"
+    limit: 5
+  inventory9:
+    restaurant: '@restaurant1'
+    date: <%= new Date() %>
+    time: "18:00"
+    limit: 5
+  inventory10:
+    restaurant: '@restaurant1'
+    date: <%= new Date() %>
+    time: "18:15"
+    limit: 5
+  inventory11:
+    restaurant: '@restaurant2'
+    date: <%= new Date() %>
+    time: "16:00"
+    limit: 10
+  inventory12:
+    restaurant: '@restaurant2'
+    date: <%= new Date() %>
+    time: "16:15"
+    limit: 5
+  inventory13:
+    restaurant: '@restaurant2'
+    date: <%= new Date() %>
+    time: "16:30"
+    limit: 5
+  inventory14:
+    restaurant: '@restaurant2'
+    date: <%= new Date() %>
+    time: "16:45"
+    limit: 5
+  inventory15:
+    restaurant: '@restaurant2'
+    date: <%= new Date() %>
+    time: "17:00"
+    limit: 5
+  inventory16:
+    restaurant: '@restaurant2'
+    date: <%= new Date() %>
+    time: "17:15"
+    limit: 5
+  inventory17:
+    restaurant: '@restaurant2'
+    date: <%= new Date() %>
+    time: "17:30"
+    limit: 5
+  inventory18:
+    restaurant: '@restaurant2'
+    date: <%= new Date() %>
+    time: "17:45"
+    limit: 5
+  inventory19:
+    restaurant: '@restaurant2'
+    date: <%= new Date() %>
+    time: "18:00"
+    limit: 5
+  inventory20:
+    restaurant: '@restaurant2'
+    date: <%= new Date() %>
+    time: "18:15"
+    limit: 5

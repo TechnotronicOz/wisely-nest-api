@@ -1,0 +1,7 @@
+entity: Restaurant
+items:
+  restaurant{1..2}:
+    name: '{{company.companyName}}'
+    location: '{{address.city}}, {{address.state}}'
+    timezone: '{{address.timeZone}}'
+

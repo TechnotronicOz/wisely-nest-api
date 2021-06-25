@@ -23,7 +23,7 @@ import { ReservationResolver } from './reservation.resolver';
       ],
     }),
   ],
-  providers: [ReservationService, ReservationResolver],
+  providers: [ReservationService, ReservationResolver, ReservationEntity],
   exports: [ReservationEntity, ReservationService],
 })
 export class ReservationModule {}
