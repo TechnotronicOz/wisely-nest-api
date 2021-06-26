@@ -140,14 +140,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/reservation",
+							"raw": "http://localhost:3000/graphql",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"reservation"
+								"graphql"
 							]
 						}
 					},
@@ -161,7 +161,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation {\n  deleteOneReservation(input: {\n    id: 1\n  }) {\n    id\n  }\n}",
+								"query": "mutation {\n  deleteOneReservation(input: {\n      id: 1\n  }) {\n      id\n  }\n}",
 								"variables": ""
 							},
 							"options": {
@@ -171,14 +171,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/reservation",
+							"raw": "http://localhost:3000/graphql",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"reservation"
+								"graphql"
 							]
 						}
 					},
