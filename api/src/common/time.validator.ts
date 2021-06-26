@@ -8,10 +8,14 @@ import {
 
 export const timeRegex = /^(2[0-3]|[01][0-9]):?([0-5][0-9])$/;
 
+export function fifteenInterval(ts: string): boolean {
+  return Number(ts.split(':')[1]) % 15 === 0;
+}
+
 @ValidatorConstraint({ async: true })
 export class IsCustomTimeConstraint implements ValidatorConstraintInterface {
   fifteenInterval(ts: string): boolean {
-    return Number(ts.split(':')[1]) % 15 === 0;
+    return fifteenInterval(ts);
   }
 
   validate(ts: string, args: ValidationArguments) {

@@ -11,10 +11,8 @@ import {
   newNotFoundException,
 } from '../util/exceptions';
 import { dateTimeSorter } from '../util/sorter';
+import { RangeBuilder } from './range-builder/range-builder';
 import { InventoryRangeInputDTO } from './dto/inventory-range.input.dto';
-import { add, format } from 'date-fns';
-
-const INVENTORY_INTERVAL = 15; // min
 
 @Injectable()
 @QueryService(InventoryEntity)
@@ -52,20 +50,7 @@ export class InventoryService extends TypeOrmQueryService<InventoryEntity> {
     const start = new Date(`${startDate}T${startTime}`);
     const end = new Date(`${endDate}T${endTime}`);
 
-    let dateIncrementer = start;
-    const dtTuples = [];
-    let complexityCounter = 0;
-
-    while (dateIncrementer < end && complexityCounter <= 150) {
-      complexityCounter++;
-      const incDate = format(dateIncrementer, 'yyyy-MM-dd');
-      const incTime = format(dateIncrementer, 'HH:mm');
-      dtTuples.push([incDate, incTime]);
-      dateIncrementer = add(dateIncrementer, {
-        minutes: INVENTORY_INTERVAL,
-      });
-    }
-
+    const dtTuples = new RangeBuilder(start, end).build();
     const inputs: InventoryInputDTO[] = dtTuples.map(
       ([date, time]): InventoryInputDTO => {
         return {
