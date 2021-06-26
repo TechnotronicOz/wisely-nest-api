@@ -51,7 +51,7 @@ describe('InventoryResolver', () => {
         {
           provide: 'ReservationService',
           useValue: {
-            create: mockCreate,
+            createOne: mockCreate,
           },
         },
         ReservationResolver,
@@ -75,7 +75,7 @@ describe('InventoryResolver', () => {
         user: reservation.user,
         inventoryId: reservation.inventoryId,
       }),
-    ).toStrictEqual(reservation);
+    ).toEqual(reservation);
     expect(mockCreate).toHaveBeenCalled();
   });
 });

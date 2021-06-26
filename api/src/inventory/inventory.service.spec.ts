@@ -39,6 +39,7 @@ describe('InventoryService', () => {
     repo = {
       count: jest.fn(() => k),
       create: jest.fn(() => Promise.resolve(inventory)),
+      save: jest.fn(() => Promise.resolve(inventory)),
     } as unknown as Repository<InventoryEntity>;
   };
 
@@ -81,8 +82,12 @@ describe('InventoryService', () => {
     jest
       .spyOn(restaurantService, 'getById')
       .mockImplementation(() => Promise.resolve(restaurant));
-    expect(await service.create(inventoryDto)).toBe(inventory);
-    expect(repo.create).toHaveBeenCalled();
+    const newInventory = await service.create(inventoryDto);
+    expect(newInventory.date).toEqual(inventoryDto.date);
+    expect(newInventory.time).toEqual(inventoryDto.time);
+    expect(newInventory.limit).toEqual(inventoryDto.limit);
+    expect(newInventory.restaurantId).toEqual(inventoryDto.restaurantId);
+    expect(repo.save).toHaveBeenCalled();
   });
 
   it('should reject if provided with a non-existing restaurant', async () => {

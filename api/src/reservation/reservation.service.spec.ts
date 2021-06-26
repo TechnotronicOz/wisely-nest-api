@@ -11,13 +11,19 @@ import { getQueryServiceToken } from '@nestjs-query/core';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { InventoryDTO } from '../inventory/dto/inventory.dto';
 import { ReservationDTO } from './dto/reservation.dto';
+import { InventoryService } from '../inventory/inventory.service';
 
 describe('ReservationService', () => {
   let service: ReservationService;
+  let inventoryService: InventoryService;
   let repo: Repository<ReservationEntity>;
   const mockedQueryService = {
     query: jest.fn(() => Promise.resolve(reservation)),
     createOne: jest.fn(() => Promise.resolve(reservation)),
+  };
+
+  const mockedInventoryService = {
+    findById: jest.fn(() => Promise.resolve(inventory)),
   };
 
   const inventoryRaw: InventoryInputDTO = {
@@ -49,11 +55,17 @@ describe('ReservationService', () => {
     repo = {
       find: jest.fn().mockImplementation(() => Promise.resolve()),
       create: jest.fn().mockImplementation(() => Promise.resolve(reservation)),
+      save: jest.fn().mockImplementation(() => Promise.resolve(reservation)),
     } as unknown as Repository<ReservationEntity>;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ReservationService,
+        InventoryService,
+        {
+          provide: 'InventoryService',
+          useValue: mockedInventoryService,
+        },
         {
           provide: getRepositoryToken(ReservationEntity),
           useValue: repo,
@@ -66,6 +78,7 @@ describe('ReservationService', () => {
     }).compile();
 
     service = module.get<ReservationService>(ReservationService);
+    inventoryService = module.get<InventoryService>(InventoryService);
     repo = module.get<Repository<ReservationEntity>>(
       getRepositoryToken(ReservationEntity),
     );
@@ -79,25 +92,29 @@ describe('ReservationService', () => {
 
   it('should create inventory', async () => {
     jest
-      .spyOn(service, 'query')
+      .spyOn(repo, 'find')
       .mockImplementation(() => Promise.resolve([reservation]));
+    jest
+      .spyOn(inventoryService, 'findById')
+      .mockImplementation(() => Promise.resolve(inventory));
     repo.create = jest
       .fn()
       .mockImplementation(() => Promise.resolve(reservation));
-    const b = await service.create(reservationRaw);
+    const b = await service.createOne(reservationRaw);
     expect(b).toBeInstanceOf(ReservationEntity);
     expect(b.size).toBe(reservationRaw.size);
     expect(b.user).toBe(reservationRaw.user);
     expect(b.inventoryId).toBe(reservationRaw.inventoryId);
-    expect(service.query).toHaveBeenCalled();
-    expect(repo.create).toHaveBeenCalled();
+    expect(inventoryService.findById).toHaveBeenCalled();
+    expect(repo.find).toHaveBeenCalled();
+    expect(repo.save).toHaveBeenCalled();
   });
 
   it('should reject if inventoryId not found', async () => {
     jest.spyOn(service, 'query').mockImplementation(() => Promise.resolve([]));
 
     service
-      .create(reservationRaw)
+      .createOne(reservationRaw)
       .then(() => {
         expect(repo.create).toHaveBeenCalledTimes(0);
       })
@@ -186,7 +203,7 @@ describe('ReservationService', () => {
     };
 
     service
-      .create(newReservation)
+      .createOne(newReservation)
       .then(() => {
         expect(repo.create).toHaveBeenCalledTimes(0);
       })
@@ -266,7 +283,11 @@ describe('ReservationService', () => {
     reservations[1].inventory = inventories[0];
 
     jest
-      .spyOn(service, 'query')
+      .spyOn(inventoryService, 'findById')
+      .mockImplementation(() => Promise.resolve(inventories[0]));
+
+    repo.find = jest
+      .fn()
       .mockImplementation(() => Promise.resolve(reservations));
 
     const newReservation: ReservationInputDTO = {
@@ -277,7 +298,7 @@ describe('ReservationService', () => {
     };
 
     try {
-      const reservation = await service.create(newReservation);
+      const reservation = await service.createOne(newReservation);
       expect(reservation).toBeUndefined();
       expect(repo.create).toHaveBeenCalledTimes(0);
     } catch (err) {
@@ -295,7 +316,7 @@ describe('ReservationService', () => {
       size: 2,
     };
     try {
-      const reservation = await service.create(newReservation2);
+      const reservation = await service.createOne(newReservation2);
       expect(reservation).toBeInstanceOf(ReservationEntity);
       expect(reservation.size).toEqual(newReservation2.size);
       expect(reservation.user).toEqual(newReservation2.user);
