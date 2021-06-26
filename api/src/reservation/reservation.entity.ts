@@ -16,6 +16,9 @@ export class ReservationEntity {
   id!: number;
 
   @Column()
+  name: string;
+
+  @Column()
   user: string;
 
   @Column()

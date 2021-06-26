@@ -4,6 +4,7 @@ import { InventoryEntity } from './inventory.entity';
 import { InventoryService } from './inventory.service';
 import { InventoryInputDTO } from './dto/inventory.input.dto';
 import { Logger } from '@nestjs/common';
+import { InventoryRangeInputDTO } from './dto/inventory-range.input.dto';
 
 @Resolver(() => InventoryDTO)
 export class InventoryResolver {
@@ -28,5 +29,16 @@ export class InventoryResolver {
   ): Promise<InventoryEntity[]> {
     this.logger.log(`creating many inventory [${createInputData.length}]`);
     return this.inventoryService.createMany(createInputData);
+  }
+
+  @Mutation(() => [InventoryDTO])
+  async createForRange(
+    @Args({ name: 'input', type: () => InventoryRangeInputDTO })
+    input: InventoryRangeInputDTO,
+  ): Promise<InventoryEntity[]> {
+    this.logger.log(
+      `creating inventories for range [range=${JSON.stringify(input)}]`,
+    );
+    return this.inventoryService.createForRange(input);
   }
 }

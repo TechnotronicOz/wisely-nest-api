@@ -24,6 +24,9 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Graphql Playground
+http://localhost:3000/graphql
+
 ## Test
 
 ```bash

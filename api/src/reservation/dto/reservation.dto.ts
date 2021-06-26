@@ -16,6 +16,9 @@ export class ReservationDTO {
   id!: number;
 
   @FilterableField()
+  name?: string;
+
+  @FilterableField()
   user!: string;
 
   @FilterableField()

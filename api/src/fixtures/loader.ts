@@ -9,6 +9,9 @@ import {
 import { createConnection, getRepository } from 'typeorm';
 import { config } from './ormconfig';
 
+// https://github.com/typeorm/typeorm/blob/master/docs/using-cli.md#installing-cli
+// Typeorm requires you have both typeorm and ts-node installed globally for the cli to work
+
 const loadFixtures = async (fixturesPath: string) => {
   let connection;
 
