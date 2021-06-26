@@ -1,0 +1,9 @@
+version = 1
+
+test_patterns = ["*.spec.ts"]
+
+exclude_patterns = ["migrations/**/*.ts"]
+
+[[analyzers]]
+name = "test-coverage"
+enabled = true
