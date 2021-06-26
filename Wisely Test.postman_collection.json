@@ -116,6 +116,32 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Create For Range",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  createForRange(input: {\n    restaurantId: 1,\n    limit: 10,\n    startDate: \"2021-07-01\",\n    startTime: \"15:00\",\n    endDate: \"2021-07-01\",\n    endTime: \"20:00\"\n  }) {\n    id\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -130,7 +156,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation {\n  createOneReservation(createInputData: {\n    restaurantId: 1,\n    inventoryId: 1,\n    user: \"matt@mattcarter.io\",\n    size: 2,\n  }) {\n    id\n  }\n}",
+								"query": "mutation {\n  createOneReservation(createInputData: {\n    restaurantId: 1,\n    inventoryId: 1,\n    user: \"matt@mattcarter.io\",\n    name: \"Matt Carter\",\n    size: 2,\n  }) {\n    id\n  }\n}",
 								"variables": ""
 							},
 							"options": {

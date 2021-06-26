@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { InventoryEntity } from './inventory.entity';
 import { TypeOrmQueryService } from '@nestjs-query/query-typeorm';
 import { RestaurantService } from '../restaurant/restaurant.service';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { QueryService } from '@nestjs-query/core';
 import { InventoryInputDTO } from './dto/inventory.input.dto';
 import {
@@ -11,6 +11,10 @@ import {
   newNotFoundException,
 } from '../util/exceptions';
 import { dateTimeSorter } from '../util/sorter';
+import { InventoryRangeInputDTO } from './dto/inventory-range.input.dto';
+import { add, format } from 'date-fns';
+
+const INVENTORY_INTERVAL = 15; // min
 
 @Injectable()
 @QueryService(InventoryEntity)
@@ -39,6 +43,74 @@ export class InventoryService extends TypeOrmQueryService<InventoryEntity> {
       rets.push(await this.create(dtos[i]));
     }
     return rets;
+  }
+
+  async createForRange(
+    rangeDto: InventoryRangeInputDTO,
+  ): Promise<InventoryEntity[]> {
+    const { startDate, startTime, endDate, endTime } = rangeDto;
+    const start = new Date(`${startDate}T${startTime}`);
+    const end = new Date(`${endDate}T${endTime}`);
+
+    let dateIncrementer = start;
+    const dtTuples = [];
+    let complexityCounter = 0;
+
+    while (dateIncrementer < end && complexityCounter <= 150) {
+      complexityCounter++;
+      const incDate = format(dateIncrementer, 'yyyy-MM-dd');
+      const incTime = format(dateIncrementer, 'HH:mm');
+      dtTuples.push([incDate, incTime]);
+      dateIncrementer = add(dateIncrementer, {
+        minutes: INVENTORY_INTERVAL,
+      });
+    }
+
+    const inputs: InventoryInputDTO[] = dtTuples.map(
+      ([date, time]): InventoryInputDTO => {
+        return {
+          restaurantId: rangeDto.restaurantId,
+          limit: rangeDto.limit,
+          date,
+          time,
+        };
+      },
+    );
+
+    await this.checkForDuplicatesInRange(rangeDto.restaurantId, inputs);
+
+    this.logger.log(
+      `creating range for ${inputs.length} inventories [restaurantId=${rangeDto.restaurantId}, limit=${rangeDto.limit}]`,
+    );
+
+    return this.createMany(inputs);
+  }
+
+  private async checkForDuplicatesInRange(
+    restaurantId: number,
+    inputDtos: InventoryInputDTO[],
+  ): Promise<void> {
+    const dupes: InventoryEntity[] = await this.repo.find({
+      where: {
+        restaurantId,
+        date: In(inputDtos.map((i) => i.date)),
+        time: In(inputDtos.map((i) => i.time)),
+      },
+    });
+
+    if (dupes.length) {
+      const dupeIds = dupes.map((d) => +d.id);
+      this.logger.error(
+        `inventory range produce duplicates [ids=${JSON.stringify(dupeIds)}]`,
+      );
+      throw newBadRequestException(
+        `inventory range has produced duplicates of existing records [ids=${JSON.stringify(
+          dupeIds,
+        )}]`,
+      );
+    }
+
+    return Promise.resolve();
   }
 
   /**

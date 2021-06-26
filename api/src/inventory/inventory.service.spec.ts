@@ -23,6 +23,7 @@ describe('InventoryService', () => {
     limit: 5,
   };
   const inventory = plainToClass(InventoryEntity, inventoryDto);
+  inventory.id = 1;
 
   let service: InventoryService;
   let restaurantService: RestaurantService;
@@ -40,6 +41,7 @@ describe('InventoryService', () => {
       count: jest.fn(() => k),
       create: jest.fn(() => Promise.resolve(inventory)),
       save: jest.fn(() => Promise.resolve(inventory)),
+      find: jest.fn(() => Promise.resolve([inventory])),
     } as unknown as Repository<InventoryEntity>;
   };
 
@@ -112,5 +114,66 @@ describe('InventoryService', () => {
         'cannot create inventory, conflicts with existing records',
       );
     });
+  });
+
+  it('should create for a date range', async () => {
+    jest
+      .spyOn(restaurantService, 'getById')
+      .mockImplementation(() => Promise.resolve(restaurant));
+
+    jest
+      .spyOn(service, 'createMany')
+      .mockImplementation(() => Promise.resolve([inventory, inventory]));
+
+    // repo find's no duplicates
+    repo.find = jest.fn().mockImplementation(() => []);
+
+    const newInventories = await service.createForRange({
+      restaurantId: 1,
+      limit: 10,
+      startDate: '2021-06-22',
+      startTime: '15:00',
+      endDate: '2021-06-22',
+      endTime: '15:30',
+    });
+
+    expect(newInventories.length).toEqual(2);
+    newInventories.forEach((inv) => {
+      expect(inv.id).toBeDefined();
+      expect(inv.time).toBeDefined();
+      expect(inv.date).toBeDefined();
+      expect(inv.restaurantId).toEqual(1);
+    });
+    expect(service.createMany).toHaveBeenCalled();
+  });
+
+  it('should reject if create for range has duplicates in db', async () => {
+    jest
+      .spyOn(restaurantService, 'getById')
+      .mockImplementation(() => Promise.resolve(restaurant));
+
+    jest
+      .spyOn(service, 'createMany')
+      .mockImplementation(() => Promise.resolve([]));
+
+    // find returns a duplicate for us!
+    repo.find = jest.fn().mockImplementation(() => [inventory]);
+
+    try {
+      await service.createForRange({
+        restaurantId: 1,
+        limit: 10,
+        startDate: '2021-06-22',
+        startTime: '15:00',
+        endDate: '2021-06-22',
+        endTime: '18:00',
+      });
+      expect(service.createMany).toHaveBeenCalledTimes(0);
+    } catch (e) {
+      expect(e.message).toEqual(
+        'inventory range has produced duplicates of existing records [ids=[1]]',
+      );
+      expect(service.createMany).toHaveBeenCalledTimes(0);
+    }
   });
 });

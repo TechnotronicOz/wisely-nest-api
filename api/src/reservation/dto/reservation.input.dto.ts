@@ -1,11 +1,15 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, IsNumber, Min } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumber, IsString, Min } from 'class-validator';
 
 @InputType('ReservationInput')
 export class ReservationInputDTO {
   @Field()
   @IsEmail()
   user!: string;
+
+  @Field()
+  @IsString()
+  name?: string;
 
   @Field()
   @IsNumber()
