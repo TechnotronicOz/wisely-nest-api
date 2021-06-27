@@ -7,10 +7,14 @@ import { ReservationInputDTO } from './dto/reservation.input.dto';
 import { newBadRequestException } from '../util/exceptions';
 import { InventoryEntity } from '../inventory/inventory.entity';
 import { InventoryService } from '../inventory/inventory.service';
+import { Mapper } from '../util/domain-mapper';
+import { ReservationMapper } from './reservation.mapper';
 
 @Injectable()
 export class ReservationService extends TypeOrmQueryService<ReservationEntity> {
   private readonly logger: Logger = new Logger(ReservationService.name);
+
+  private readonly mapper: Mapper<ReservationEntity, ReservationInputDTO>;
 
   constructor(
     @InjectRepository(ReservationEntity)
@@ -18,6 +22,7 @@ export class ReservationService extends TypeOrmQueryService<ReservationEntity> {
     private readonly inventoryService: InventoryService,
   ) {
     super(reservationRepo);
+    this.mapper = new ReservationMapper();
   }
 
   /**
@@ -42,7 +47,8 @@ export class ReservationService extends TypeOrmQueryService<ReservationEntity> {
     const reservationInventory: ReservationEntity[] =
       await this.reservationRepo.find({
         where: {
-          inventoryId: { eq: createDto.inventoryId },
+          restaurantId: createDto.restaurantId,
+          inventoryId: createDto.inventoryId,
         },
       });
 
@@ -63,14 +69,11 @@ export class ReservationService extends TypeOrmQueryService<ReservationEntity> {
     }
 
     this.logger.log(`creating reservation [${JSON.stringify(createDto)}]`);
-    const e = new ReservationEntity();
-    e.restaurantId = createDto.restaurantId;
-    e.inventoryId = createDto.inventoryId;
-    e.user = createDto.user;
-    e.size = createDto.size;
-    e.created = new Date();
+    const e = this.mapper.toDomain(createDto);
+    // typeorm bug https://github.com/typeorm/typeorm/pull/5680
+    // sql has: INSERT () VALUES () RETURNING id, created, updated;
     const s = await this.reservationRepo.save(e);
-    e.id = Number(s.id);
+    this.mapper.attachId(s.id, e);
     return e;
   }
 }
