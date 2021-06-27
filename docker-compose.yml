@@ -1,13 +1,34 @@
 version: "3.8"
 services:
-  wisely-postgres:
-    image: postgres:12
+  wisely-api:
+    container_name: wisely-api
+    build:
+      context: ./api
+      target: development
+    volumes:
+    - ./api:/usr/src/app
+    - /usr/src/app/node_modules
     ports:
-      - "5459:5432"
+    - 3000:3000
+    - 9229:9229
+    command: npm run start:dev
+    environment:
+      NODE_ENV: development
+      WISE_HOST: "host.docker.internal"
+    networks:
+      - wisely
+    depends_on:
+      - wisely-postgres
+  wisely-postgres:
+    image: postgres:13
+    ports:
+      - 5459:5432
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
+      PG_DATA: /var/lib/postgresql/data
     volumes:
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-databases.sql
+      - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: "pg_isready"
       interval: 10s
@@ -17,3 +38,5 @@ services:
       - wisely
 networks:
   wisely:
+volumes:
+  pgdata:

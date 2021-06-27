@@ -15,7 +15,7 @@ export class ReservationEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id!: number;
 
-  @Column()
+  @Column({ nullable: true })
   name: string;
 
   @Column()

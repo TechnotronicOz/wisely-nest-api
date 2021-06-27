@@ -6,9 +6,9 @@ export function dateTimeSorter(
   d2: string,
   t2: string,
 ): number {
-  const splitDateToDate = (d: string, t: string) => new Date(`${d}T${t}`);
-  const aDate = splitDateToDate(d1, t1);
-  const bDate = splitDateToDate(d2, t2);
+  const makeDate = (d: string, t: string) => new Date(`${d}T${t}`);
+  const aDate = makeDate(d1, t1);
+  const bDate = makeDate(d2, t2);
   if (isAfter(aDate, bDate)) {
     return 1;
   }

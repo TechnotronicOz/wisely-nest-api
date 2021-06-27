@@ -13,11 +13,15 @@ import {
 import { dateTimeSorter } from '../util/sorter';
 import { RangeBuilder } from './range-builder/range-builder';
 import { InventoryRangeInputDTO } from './dto/inventory-range.input.dto';
+import { InventoryMapper } from './inventory.mapper';
+import { Mapper } from '../util/domain-mapper';
 
 @Injectable()
 @QueryService(InventoryEntity)
 export class InventoryService extends TypeOrmQueryService<InventoryEntity> {
   private readonly logger = new Logger(InventoryService.name);
+
+  private readonly mapper: Mapper<InventoryEntity, InventoryInputDTO>;
 
   constructor(
     @InjectRepository(InventoryEntity)
@@ -25,6 +29,7 @@ export class InventoryService extends TypeOrmQueryService<InventoryEntity> {
     private readonly restaurantService: RestaurantService,
   ) {
     super(repo);
+    this.mapper = new InventoryMapper();
   }
 
   /**
@@ -86,7 +91,9 @@ export class InventoryService extends TypeOrmQueryService<InventoryEntity> {
     if (dupes.length) {
       const dupeIds = dupes.map((d) => +d.id);
       this.logger.error(
-        `inventory range produce duplicates [ids=${JSON.stringify(dupeIds)}]`,
+        `inventory range produce duplicates [restaurantId=${restaurantId}, ids=${JSON.stringify(
+          dupeIds,
+        )}]`,
       );
       throw newBadRequestException(
         `inventory range has produced duplicates of existing records [ids=${JSON.stringify(
@@ -130,16 +137,11 @@ export class InventoryService extends TypeOrmQueryService<InventoryEntity> {
     }
 
     this.logger.log(`creating new inventory record [${JSON.stringify(dto)}]`);
-    const e = new InventoryEntity();
-    e.restaurantId = dto.restaurantId;
-    e.date = dto.date;
-    e.time = dto.time;
-    e.limit = dto.limit;
-    e.created = new Date();
+    const e = this.mapper.toDomain(dto);
     // typeorm bug https://github.com/typeorm/typeorm/pull/5680
     // sql has: INSERT () VALUES () RETURNING id, created, updated;
     const s = await this.repo.save(e);
-    e.id = Number(s.id);
+    this.mapper.attachId(s.id, e);
     return e;
   }
 }
