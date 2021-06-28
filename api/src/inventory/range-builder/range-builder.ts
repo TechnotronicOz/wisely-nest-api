@@ -1,5 +1,6 @@
 import { add, format } from 'date-fns';
-import { fifteenInterval, timeRegex } from '../../common/time.validator';
+import { fifteenInterval } from '../../common/time.validator';
+import { Logger } from '@nestjs/common';
 
 const MAX_COMPLEXITY = 200; // hard limit of 200 record per request
 const DEFAULT_INTERVAL = 15; // minutes
@@ -8,6 +9,8 @@ export class RangeBuilder {
   private readonly d1: Date;
   private readonly d2: Date;
   private readonly dtTuples = [];
+  private readonly logger: Logger = new Logger(RangeBuilder.name);
+
   constructor(d1: Date, d2: Date) {
     this.d1 = d1;
     this.d2 = d2;
@@ -27,6 +30,9 @@ export class RangeBuilder {
 
     while (dateIncrementer <= this.d2) {
       if (complexityCounter >= MAX_COMPLEXITY) {
+        this.logger.warn(
+          `at max complexity, stopping generation [d1=${this.d1}, id2=${this.d2}]`,
+        );
         break;
       }
       complexityCounter++;

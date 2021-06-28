@@ -12,6 +12,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { InventoryDTO } from '../inventory/dto/inventory.dto';
 import { ReservationDTO } from './dto/reservation.dto';
 import { InventoryService } from '../inventory/inventory.service';
+import { mapAttach } from '../util/domain-mapper';
 
 describe('ReservationService', () => {
   let service: ReservationService;
@@ -118,19 +119,15 @@ describe('ReservationService', () => {
   describe('create', () => {
     it('should reject if inventoryId not found', async () => {
       jest
-        .spyOn(service, 'query')
-        .mockImplementation(() => Promise.resolve([]));
+        .spyOn(inventoryService, 'findById')
+        .mockImplementation(() => Promise.resolve(undefined));
 
-      service
-        .createOne(reservationRaw)
-        .then(() => {
-          expect(repo.create).toHaveBeenCalledTimes(0);
-        })
-        .catch((err: Error) => {
-          expect(err).toBeInstanceOf(NotFoundException);
-          expect(err.message).toEqual('inventory not found [id=1]');
-          expect(repo.create).toHaveBeenCalledTimes(0);
-        });
+      jest.spyOn(repo, 'find').mockImplementation(() => Promise.resolve([]));
+
+      await expect(service.createOne(reservationRaw)).rejects.toThrowError(
+        'inventory not found [id=1]',
+      );
+      expect(repo.create).toHaveBeenCalledTimes(0);
     });
 
     it("should reject if inventory is at it's limit", async () => {
@@ -142,30 +139,6 @@ describe('ReservationService', () => {
           restaurantId: 1,
           date: '2021-06-22',
           time: '17:15',
-          created: new Date(),
-        },
-        {
-          id: 2,
-          limit: 10,
-          restaurantId: 1,
-          date: '2021-06-22',
-          time: '17:30',
-          created: new Date(),
-        },
-        {
-          id: 3,
-          limit: 10,
-          restaurantId: 1,
-          date: '2021-06-22',
-          time: '17:45',
-          created: new Date(),
-        },
-        {
-          id: 4,
-          limit: 10,
-          restaurantId: 1,
-          date: '2021-06-22',
-          time: '18:00',
           created: new Date(),
         },
       ];
@@ -196,11 +169,12 @@ describe('ReservationService', () => {
         plainToClass(ReservationEntity, r),
       );
 
-      reservations[0].inventory = inventories[0];
-      reservations[1].inventory = inventories[0];
+      jest
+        .spyOn(inventoryService, 'findById')
+        .mockImplementation(() => Promise.resolve(inventories[0]));
 
       jest
-        .spyOn(service, 'query')
+        .spyOn(repo, 'find')
         .mockImplementation(() => Promise.resolve(reservations));
 
       const newReservation: ReservationInputDTO = {
@@ -211,18 +185,10 @@ describe('ReservationService', () => {
         size: 2,
       };
 
-      service
-        .createOne(newReservation)
-        .then(() => {
-          expect(repo.create).toHaveBeenCalledTimes(0);
-        })
-        .catch((err: Error) => {
-          expect(err).toBeInstanceOf(BadRequestException);
-          expect(err.message).toEqual(
-            'no reservations available for date/time/party size selected',
-          );
-          expect(repo.create).toHaveBeenCalledTimes(0);
-        });
+      await expect(service.createOne(newReservation)).rejects.toThrowError(
+        'no reservations available for date/time/party size selected',
+      );
+      expect(repo.create).toHaveBeenCalledTimes(0);
     });
 
     it("should reject if reservation size would exhaust the inventory's limit", async () => {
@@ -234,30 +200,6 @@ describe('ReservationService', () => {
           restaurantId: 1,
           date: '2021-06-22',
           time: '17:15',
-          created: new Date(),
-        },
-        {
-          id: 2,
-          limit: 10,
-          restaurantId: 1,
-          date: '2021-06-22',
-          time: '17:30',
-          created: new Date(),
-        },
-        {
-          id: 3,
-          limit: 10,
-          restaurantId: 1,
-          date: '2021-06-22',
-          time: '17:45',
-          created: new Date(),
-        },
-        {
-          id: 4,
-          limit: 10,
-          restaurantId: 1,
-          date: '2021-06-22',
-          time: '18:00',
           created: new Date(),
         },
       ];
@@ -288,9 +230,6 @@ describe('ReservationService', () => {
         plainToClass(ReservationEntity, r),
       );
 
-      reservations[0].inventory = inventories[0];
-      reservations[1].inventory = inventories[0];
-
       jest
         .spyOn(inventoryService, 'findById')
         .mockImplementation(() => Promise.resolve(inventories[0]));
@@ -298,6 +237,10 @@ describe('ReservationService', () => {
       repo.find = jest
         .fn()
         .mockImplementation(() => Promise.resolve(reservations));
+
+      repo.save = jest
+        .fn()
+        .mockImplementation(() => Promise.resolve({ id: 2 }));
 
       const newReservation: ReservationInputDTO = {
         restaurantId: 1,
@@ -307,17 +250,10 @@ describe('ReservationService', () => {
         size: 3,
       };
 
-      try {
-        const reservation = await service.createOne(newReservation);
-        expect(reservation).toBeUndefined();
-        expect(repo.create).toHaveBeenCalledTimes(0);
-      } catch (err) {
-        expect(err).toBeInstanceOf(BadRequestException);
-        expect(err.message).toEqual(
-          'no reservations available for date/time/party size selected',
-        );
-        expect(repo.create).toHaveBeenCalledTimes(0);
-      }
+      await expect(service.createOne(newReservation)).rejects.toThrowError(
+        'no reservations available for date/time/party size selected',
+      );
+      expect(repo.save).toHaveBeenCalledTimes(0);
 
       const newReservation2: ReservationInputDTO = {
         restaurantId: 1,
@@ -326,15 +262,14 @@ describe('ReservationService', () => {
         name: 'Matt',
         size: 2,
       };
-      try {
-        const reservation = await service.createOne(newReservation2);
-        expect(reservation).toBeInstanceOf(ReservationEntity);
-        expect(reservation.size).toEqual(newReservation2.size);
-        expect(reservation.user).toEqual(newReservation2.user);
-        expect(reservation.inventoryId).toEqual(newReservation2.inventoryId);
-        expect(reservation.restaurantId).toEqual(newReservation2.restaurantId);
-        expect(repo.create).toHaveBeenCalled();
-      } catch {}
+      const reservation = await service.createOne(newReservation2);
+      expect(reservation).toBeInstanceOf(ReservationEntity);
+      expect(reservation.id).toEqual(2);
+      expect(reservation.size).toEqual(newReservation2.size);
+      expect(reservation.user).toEqual(newReservation2.user);
+      expect(reservation.inventoryId).toEqual(newReservation2.inventoryId);
+      expect(reservation.restaurantId).toEqual(newReservation2.restaurantId);
+      expect(repo.save).toHaveBeenCalled();
     });
   });
 
@@ -426,15 +361,9 @@ describe('ReservationService', () => {
         .mockImplementation(() => Promise.resolve({} as any));
 
       // update from 2 to 4, would put us @ 8, 2 over our limit of 6
-      try {
-        await service.update(1, { size: 4 });
-      } catch (e) {
-        expect(e.message).toEqual(
-          'no reservations available for date/time/party size selected, unable to update',
-        );
-      }
-      // const update = await service.update(1, { size: 4 });
-      // expect(update.size).toEqual(1);
+      await expect(service.update(1, { size: 4 })).rejects.toThrowError(
+        'no reservations available for date/time/party size selected, unable to update',
+      );
       expect(repo.find).toBeCalledTimes(1);
       expect(repo.find).toBeCalledWith({
         where: { inventoryId: 1, restaurantId: 1 },
