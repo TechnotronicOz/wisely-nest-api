@@ -1,18 +1,16 @@
-import { Mapper } from '../util/domain-mapper';
+import { mapAttach, Mapper } from '../util/domain-mapper';
 import { ReservationEntity } from './reservation.entity';
 import { ReservationInputDTO } from './dto/reservation.input.dto';
+import { ReservationUpdateDTO } from './dto/reservation.update.dto';
 
 export class ReservationMapper extends Mapper<
   ReservationEntity,
-  ReservationInputDTO
+  ReservationInputDTO,
+  ReservationUpdateDTO
 > {
-  toDomain(raw: ReservationInputDTO): ReservationEntity {
+  toDomain(raw: ReservationInputDTO | ReservationUpdateDTO): ReservationEntity {
     const e = new ReservationEntity();
-    e.restaurantId = raw.restaurantId;
-    e.inventoryId = raw.restaurantId;
-    e.name = raw.name;
-    e.user = raw.user;
-    e.size = raw.size;
+    mapAttach<ReservationEntity, ReservationUpdateDTO>(e, raw);
     e.created = new Date();
     return e;
   }

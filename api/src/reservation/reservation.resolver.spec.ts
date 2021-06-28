@@ -10,6 +10,7 @@ import { InventoryEntity } from '../inventory/inventory.entity';
 describe('InventoryResolver', () => {
   let resolver: ReservationResolver;
   let mockCreate: jest.Mock;
+  let mockUpdate: jest.Mock;
 
   const reservation = plainToClass(ReservationEntity, {
     id: 1,
@@ -36,6 +37,7 @@ describe('InventoryResolver', () => {
 
   beforeEach(async () => {
     mockCreate = jest.fn(() => reservation);
+    mockUpdate = jest.fn(() => reservation);
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -52,6 +54,7 @@ describe('InventoryResolver', () => {
           provide: 'ReservationService',
           useValue: {
             createOne: mockCreate,
+            update: mockUpdate,
           },
         },
         ReservationResolver,
@@ -67,15 +70,30 @@ describe('InventoryResolver', () => {
     expect(resolver).toBeDefined();
   });
 
-  it('should call create on reservation Service to create a reservation record', async () => {
-    expect(
-      await resolver.createOneReservation({
-        restaurantId: reservation.restaurantId,
-        size: reservation.size,
-        user: reservation.user,
-        inventoryId: reservation.inventoryId,
-      }),
-    ).toEqual(reservation);
+  it('should call create on reservation service to create a reservation record', async () => {
+    const createDto = {
+      restaurantId: reservation.restaurantId,
+      name: reservation.name,
+      size: reservation.size,
+      user: reservation.user,
+      inventoryId: reservation.inventoryId,
+    };
+    expect(await resolver.createOneReservation(createDto)).toEqual(reservation);
     expect(mockCreate).toHaveBeenCalled();
+    expect(mockCreate).toHaveBeenCalledWith(createDto);
+  });
+
+  it('should call update on reservation service to update reservation record', async () => {
+    const otherReservation = new ReservationEntity();
+    otherReservation.id = 2;
+    otherReservation.user = 'matt@mattcarter.io';
+    otherReservation.name = 'Matt';
+    otherReservation.size = 4;
+    otherReservation.restaurantId = 1;
+    otherReservation.inventoryId = 1;
+    otherReservation.created = new Date();
+    await resolver.updateOneReservation(1, { size: 2 });
+    expect(mockUpdate).toBeCalled();
+    expect(mockUpdate).toHaveBeenCalledWith(1, { size: 2 });
   });
 });

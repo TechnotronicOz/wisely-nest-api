@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinTable,
+  Index,
 } from 'typeorm';
 import { InventoryEntity } from '../inventory/inventory.entity';
 import { RestaurantEntity } from '../restaurant/restaurant.entity';
@@ -15,7 +16,7 @@ export class ReservationEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id!: number;
 
-  @Column({ nullable: true })
+  @Column()
   name: string;
 
   @Column()

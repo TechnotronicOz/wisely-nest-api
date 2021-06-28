@@ -6,11 +6,13 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
+  Index,
 } from 'typeorm';
 import { RestaurantEntity } from '../restaurant/restaurant.entity';
 import { ReservationEntity } from '../reservation/reservation.entity';
 
 @Entity()
+@Index(['restaurantId', 'date', 'time'], { unique: true })
 export class InventoryEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id?: number;

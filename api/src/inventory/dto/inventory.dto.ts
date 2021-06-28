@@ -1,8 +1,4 @@
-import {
-  FilterableField,
-  FilterableRelation,
-  IDField,
-} from '@nestjs-query/query-graphql';
+import { FilterableField, IDField } from '@nestjs-query/query-graphql';
 import {
   ObjectType,
   GraphQLISODateTime,
@@ -10,10 +6,8 @@ import {
   Int,
   ID,
 } from '@nestjs/graphql';
-import { RestaurantDTO } from '../../restaurant/dto/restaurant.dto';
 
 @ObjectType('Inventory')
-@FilterableRelation('restaurant', () => RestaurantDTO, { disableRemove: true })
 export class InventoryDTO {
   @IDField(() => ID)
   id?: number;

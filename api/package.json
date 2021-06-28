@@ -102,6 +102,20 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
+    "coveragePathIgnorePatterns": [
+      "node_modules",
+      "test-config",
+      ".dto.ts",
+      "loader.ts",
+      "ormconfig.ts",
+      "db-conn.ts",
+      "main.ts",
+      ".entity.ts",
+      "migration.ts",
+      "jestGlobalMocks.ts",
+      ".module.ts",
+      ".mock.ts"
+    ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }

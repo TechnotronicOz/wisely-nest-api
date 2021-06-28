@@ -21,7 +21,11 @@ import { Mapper } from '../util/domain-mapper';
 export class InventoryService extends TypeOrmQueryService<InventoryEntity> {
   private readonly logger = new Logger(InventoryService.name);
 
-  private readonly mapper: Mapper<InventoryEntity, InventoryInputDTO>;
+  private readonly mapper: Mapper<
+    InventoryEntity,
+    InventoryInputDTO,
+    InventoryInputDTO
+  >;
 
   constructor(
     @InjectRepository(InventoryEntity)
@@ -48,6 +52,10 @@ export class InventoryService extends TypeOrmQueryService<InventoryEntity> {
     return rets;
   }
 
+  /**
+   * Creates many inventory for a date range
+   * @param rangeDto
+   */
   async createForRange(
     rangeDto: InventoryRangeInputDTO,
   ): Promise<InventoryEntity[]> {
@@ -76,6 +84,12 @@ export class InventoryService extends TypeOrmQueryService<InventoryEntity> {
     return this.createMany(inputs);
   }
 
+  /**
+   * Given a range we generated, find duplicate records in the db
+   * @param restaurantId
+   * @param inputDtos
+   * @private
+   */
   private async checkForDuplicatesInRange(
     restaurantId: number,
     inputDtos: InventoryInputDTO[],

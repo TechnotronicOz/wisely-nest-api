@@ -1,17 +1,15 @@
-import { Mapper } from '../util/domain-mapper';
+import { mapAttach, Mapper } from '../util/domain-mapper';
 import { InventoryEntity } from './inventory.entity';
 import { InventoryInputDTO } from './dto/inventory.input.dto';
 
 export class InventoryMapper extends Mapper<
   InventoryEntity,
+  InventoryInputDTO,
   InventoryInputDTO
 > {
   toDomain(raw: InventoryInputDTO): InventoryEntity {
     const e = new InventoryEntity();
-    e.restaurantId = raw.restaurantId;
-    e.date = raw.date;
-    e.time = raw.time;
-    e.limit = raw.limit;
+    mapAttach<InventoryEntity, InventoryInputDTO>(e, raw);
     e.created = new Date();
     return e;
   }

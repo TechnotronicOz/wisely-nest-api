@@ -4,17 +4,25 @@ import { ReservationEntity } from './reservation.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ReservationInputDTO } from './dto/reservation.input.dto';
-import { newBadRequestException } from '../util/exceptions';
+import {
+  newBadRequestException,
+  newNotFoundException,
+} from '../util/exceptions';
 import { InventoryEntity } from '../inventory/inventory.entity';
 import { InventoryService } from '../inventory/inventory.service';
 import { Mapper } from '../util/domain-mapper';
 import { ReservationMapper } from './reservation.mapper';
+import { ReservationUpdateDTO } from './dto/reservation.update.dto';
 
 @Injectable()
 export class ReservationService extends TypeOrmQueryService<ReservationEntity> {
   private readonly logger: Logger = new Logger(ReservationService.name);
 
-  private readonly mapper: Mapper<ReservationEntity, ReservationInputDTO>;
+  private readonly mapper: Mapper<
+    ReservationEntity,
+    ReservationInputDTO,
+    ReservationUpdateDTO
+  >;
 
   constructor(
     @InjectRepository(ReservationEntity)
@@ -38,28 +46,16 @@ export class ReservationService extends TypeOrmQueryService<ReservationEntity> {
     // if nothing returns, we can't find the inventoryId
     if (!inventory) {
       this.logger.error(`inventory not found [id=${createDto.inventoryId}]`);
-      throw new NotFoundException(
-        new Error(`inventory not found [id=${createDto.inventoryId}]`),
+      throw newNotFoundException(
         `inventory not found [id=${createDto.inventoryId}]`,
       );
     }
 
-    const reservationInventory: ReservationEntity[] =
-      await this.reservationRepo.find({
-        where: {
-          restaurantId: createDto.restaurantId,
-          inventoryId: createDto.inventoryId,
-        },
-      });
-
-    // otherwise if the inventory length equals our limit, we can't place
-    // the booking
-    const totalReservationSize = reservationInventory.reduce(
-      (size: 0, reservation: ReservationEntity) => size + reservation.size,
-      0,
+    const canFit = await this.canInventoryHoldReservation(
+      inventory,
+      createDto.size,
     );
-    const totalInventoryLimit = inventory.limit;
-    if (totalReservationSize + createDto.size > totalInventoryLimit) {
+    if (!canFit) {
       this.logger.log(
         'no reservations available for date/time/party size selected',
       );
@@ -75,5 +71,101 @@ export class ReservationService extends TypeOrmQueryService<ReservationEntity> {
     const s = await this.reservationRepo.save(e);
     this.mapper.attachId(s.id, e);
     return e;
+  }
+
+  /**
+   * Updates a reservation
+   * @param id
+   * @param update
+   */
+  async update(
+    id: number,
+    update: ReservationUpdateDTO,
+  ): Promise<ReservationEntity> {
+    const reservation = await this.reservationRepo.findOneOrFail(id);
+
+    if (reservation.size === update.size) {
+      // no need to update the reservation if there is no diff
+      return Promise.resolve(reservation);
+    }
+
+    const inventory: InventoryEntity = await this.inventoryService.findById(
+      reservation.inventoryId,
+    );
+
+    if (!inventory) {
+      this.logger.error(`inventory not found [id=${reservation.inventoryId}]`);
+      throw newNotFoundException(
+        `inventory not found [id=${reservation.inventoryId}]`,
+      );
+    }
+
+    // can we fit the updated reservation with our other reservations?
+    const canFit = await this.canInventoryHoldReservation(
+      inventory,
+      update.size - reservation.size, // include the existing reservation in the db
+    );
+    if (!canFit) {
+      throw newBadRequestException(
+        'no reservations available for date/time/party size selected, unable to update',
+      );
+    }
+
+    this.logger.log(`updating reservation [id=${id}, newSize=${update.size}]`);
+    await this.reservationRepo.update(id, { size: update.size });
+    reservation.size = update.size;
+    return reservation;
+  }
+
+  /**
+   * Given an inventory, return the sum of reserved seats
+   * @param restaurantId
+   * @param inventoryId
+   * @private
+   */
+  private async getExitingReservationsSizeSum(
+    restaurantId: number,
+    inventoryId: number,
+  ): Promise<number> {
+    const reservationInventory: ReservationEntity[] =
+      await this.reservationRepo.find({
+        where: { restaurantId, inventoryId },
+      });
+
+    return Promise.resolve(
+      reservationInventory.reduce(
+        (size: 0, reservation: ReservationEntity) => size + reservation.size,
+        0,
+      ),
+    );
+  }
+
+  /**
+   * Given an InventoryEntity and a reservation size, the
+   * reservation accommodate it?
+   *
+   * @param {InventoryEntity} inventory
+   * @param reservationSize
+   * @private
+   */
+  private async canInventoryHoldReservation(
+    inventory: InventoryEntity,
+    reservationSize: number,
+  ): Promise<boolean> {
+    const totalReservationSize = await this.getExitingReservationsSizeSum(
+      inventory.restaurantId,
+      inventory?.id,
+    );
+
+    const totalInventoryLimit = inventory.limit;
+    if (totalReservationSize + reservationSize > totalInventoryLimit) {
+      this.logger.log(
+        'no reservations available for date/time/party size selected',
+      );
+      return Promise.resolve(false);
+    }
+
+    // we can fit it!
+    return Promise.resolve(true);
   }
 }
