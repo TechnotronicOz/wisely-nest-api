@@ -97,9 +97,9 @@ describe('InventoryService', () => {
       .spyOn(restaurantService, 'getById')
       .mockImplementation(() => Promise.resolve(null));
 
-    service.create(inventoryDto).catch((err: Error) => {
-      expect(err.message).toEqual('unable to find restaurant [id=1]');
-    });
+    await expect(service.create(inventoryDto)).rejects.toThrowError(
+      'unable to find restaurant [id=1]',
+    );
   });
 
   it('should reject if an existing inventory exist for this restaurantId/date/time combination', async () => {
@@ -109,11 +109,9 @@ describe('InventoryService', () => {
 
     jest.spyOn(repo, 'count').mockImplementation(() => Promise.resolve(1));
 
-    service.create(inventoryDto).catch((err: Error) => {
-      expect(err.message).toEqual(
-        'cannot create inventory, conflicts with existing records',
-      );
-    });
+    await expect(service.create(inventoryDto)).rejects.toThrowError(
+      'cannot create inventory, conflicts with existing records',
+    );
   });
 
   it('should create for a date range', async () => {
@@ -159,21 +157,18 @@ describe('InventoryService', () => {
     // find returns a duplicate for us!
     repo.find = jest.fn().mockImplementation(() => [inventory]);
 
-    try {
-      await service.createForRange({
+    await expect(
+      service.createForRange({
         restaurantId: 1,
         limit: 10,
         startDate: '2021-06-22',
         startTime: '15:00',
         endDate: '2021-06-22',
         endTime: '18:00',
-      });
-      expect(service.createMany).toHaveBeenCalledTimes(0);
-    } catch (e) {
-      expect(e.message).toEqual(
-        'inventory range has produced duplicates of existing records [ids=[1]]',
-      );
-      expect(service.createMany).toHaveBeenCalledTimes(0);
-    }
+      }),
+    ).rejects.toThrowError(
+      'inventory range has produced duplicates of existing records [ids=[1]]',
+    );
+    expect(service.createMany).toHaveBeenCalledTimes(0);
   });
 });
