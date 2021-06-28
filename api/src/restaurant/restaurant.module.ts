@@ -4,6 +4,7 @@ import { NestjsQueryGraphQLModule } from '@nestjs-query/query-graphql';
 import { NestjsQueryTypeOrmModule } from '@nestjs-query/query-typeorm';
 import { RestaurantEntity } from './restaurant.entity';
 import { RestaurantDTO } from './dto/restaurant.dto';
+import { RestaurantInputDTO } from './dto/restaurant.input.dto';
 
 @Module({
   imports: [
@@ -13,6 +14,8 @@ import { RestaurantDTO } from './dto/restaurant.dto';
         {
           DTOClass: RestaurantDTO,
           EntityClass: RestaurantEntity,
+          CreateDTOClass: RestaurantInputDTO,
+          UpdateDTOClass: RestaurantInputDTO,
         },
       ],
     }),

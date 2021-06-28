@@ -13,9 +13,8 @@ type DeleteManyResponse {
 type Inventory {
     created: DateTime!
     date: String!
-    id: Int!
-    limit: Float!
-    restaurant: Restaurant!
+    id: ID!
+    limit: Int!
     restaurantId: Float!
     time: String!
     updated: DateTime!
@@ -23,8 +22,8 @@ type Inventory {
 
 type InventoryAggregateGroupBy {
     date: String
-    id: Int
-    limit: Float
+    id: ID
+    limit: Int
     restaurantId: Float
     time: String
 }
@@ -53,8 +52,8 @@ type InventoryCountAggregate {
 type InventoryDeleteResponse {
     created: DateTime
     date: String
-    id: Int
-    limit: Float
+    id: ID
+    limit: Int
     restaurantId: Float
     time: String
     updated: DateTime
@@ -69,16 +68,16 @@ type InventoryEdge {
 
 type InventoryMaxAggregate {
     date: String
-    id: Int
-    limit: Float
+    id: ID
+    limit: Int
     restaurantId: Float
     time: String
 }
 
 type InventoryMinAggregate {
     date: String
-    id: Int
-    limit: Float
+    id: ID
+    limit: Int
     restaurantId: Float
     time: String
 }
@@ -90,12 +89,11 @@ type InventorySumAggregate {
 }
 
 type Mutation {
-    bookNew(date: String!, limit: Float!, restaurantId: Float!, time: String!): InventoryConnection!
-    createManyInventories(input: CreateManyInventoriesInput!): [Inventory!]!
-    createManyReservations(input: CreateManyReservationsInput!): [Reservation!]!
+    createForRange(input: InventoryRangeInput!): [Inventory!]!
+    createManyInventories(createInputData: [InventoryInput!]!): [Inventory!]!
     createManyRestaurants(input: CreateManyRestaurantsInput!): [Restaurant!]!
-    createOneInventory(input: CreateOneInventoryInput!): Inventory!
-    createOneReservation(input: CreateOneReservationInput!): Reservation!
+    createOneInventory(createInputData: InventoryInput!): Inventory!
+    createOneReservation(createInputData: ReservationInput!): Reservation!
     createOneRestaurant(input: CreateOneRestaurantInput!): Restaurant!
     deleteManyInventories(input: DeleteManyInventoriesInput!): DeleteManyResponse!
     deleteManyReservations(input: DeleteManyReservationsInput!): DeleteManyResponse!
@@ -103,13 +101,7 @@ type Mutation {
     deleteOneInventory(input: DeleteOneInventoryInput!): InventoryDeleteResponse!
     deleteOneReservation(input: DeleteOneReservationInput!): ReservationDeleteResponse!
     deleteOneRestaurant(input: DeleteOneRestaurantInput!): RestaurantDeleteResponse!
-    setInventoryOnReservation(input: SetInventoryOnReservationInput!): Reservation!
-    setRestaurantOnInventory(input: SetRestaurantOnInventoryInput!): Inventory!
-    updateManyInventories(input: UpdateManyInventoriesInput!): UpdateManyResponse!
-    updateManyReservations(input: UpdateManyReservationsInput!): UpdateManyResponse!
     updateManyRestaurants(input: UpdateManyRestaurantsInput!): UpdateManyResponse!
-    updateOneInventory(input: UpdateOneInventoryInput!): Inventory!
-    updateOneReservation(input: UpdateOneReservationInput!): Reservation!
     updateOneRestaurant(input: UpdateOneRestaurantInput!): Restaurant!
 }
 
@@ -135,7 +127,7 @@ type Query {
     ): InventoryConnection!
     inventory(
         "The id of the record to find."
-        id: Int!
+        id: ID!
     ): Inventory
     reservation(
         "The id of the record to find."
@@ -166,8 +158,8 @@ type Query {
 type Reservation {
     created: DateTime!
     id: Int!
-    inventory: Inventory!
     inventoryId: Float!
+    name: String!
     restaurantId: Float!
     size: Float!
     updated: DateTime!
@@ -177,6 +169,7 @@ type Reservation {
 type ReservationAggregateGroupBy {
     id: Int
     inventoryId: Float
+    name: String
     restaurantId: Float
     size: Float
     user: String
@@ -199,6 +192,7 @@ type ReservationConnection {
 type ReservationCountAggregate {
     id: Int
     inventoryId: Int
+    name: Int
     restaurantId: Int
     size: Int
     user: Int
@@ -208,6 +202,7 @@ type ReservationDeleteResponse {
     created: DateTime
     id: Int
     inventoryId: Float
+    name: String
     restaurantId: Float
     size: Float
     updated: DateTime
@@ -224,6 +219,7 @@ type ReservationEdge {
 type ReservationMaxAggregate {
     id: Int
     inventoryId: Float
+    name: String
     restaurantId: Float
     size: Float
     user: String
@@ -232,6 +228,7 @@ type ReservationMaxAggregate {
 type ReservationMinAggregate {
     id: Int
     inventoryId: Float
+    name: String
     restaurantId: Float
     size: Float
     user: String
@@ -328,6 +325,7 @@ enum InventorySortFields {
 enum ReservationSortFields {
     id
     inventoryId
+    name
     restaurantId
     size
     user
@@ -352,43 +350,14 @@ enum SortNulls {
     NULLS_LAST
 }
 
-input CreateManyInventoriesInput {
-    "Array of records to create"
-    inventories: [InventoryInput!]!
-}
-
-input CreateManyReservationsInput {
-    "Array of records to create"
-    reservations: [ReservationInput!]!
-}
-
 input CreateManyRestaurantsInput {
     "Array of records to create"
-    restaurants: [CreateRestaurant!]!
-}
-
-input CreateOneInventoryInput {
-    "The record to create"
-    inventory: InventoryInput!
-}
-
-input CreateOneReservationInput {
-    "The record to create"
-    reservation: ReservationInput!
+    restaurants: [RestaurantInput!]!
 }
 
 input CreateOneRestaurantInput {
     "The record to create"
-    restaurant: CreateRestaurant!
-}
-
-input CreateRestaurant {
-    created: DateTime
-    id: Int
-    location: String
-    name: String
-    timezone: String
-    updated: DateTime
+    restaurant: RestaurantInput!
 }
 
 input CursorPaging {
@@ -419,7 +388,7 @@ input DeleteManyRestaurantsInput {
 
 input DeleteOneInventoryInput {
     "The id of the record to delete."
-    id: Int!
+    id: ID!
 }
 
 input DeleteOneReservationInput {
@@ -430,6 +399,23 @@ input DeleteOneReservationInput {
 input DeleteOneRestaurantInput {
     "The id of the record to delete."
     id: Int!
+}
+
+input IDFilterComparison {
+    eq: ID
+    gt: ID
+    gte: ID
+    iLike: ID
+    in: [ID!]
+    is: Boolean
+    isNot: Boolean
+    like: ID
+    lt: ID
+    lte: ID
+    neq: ID
+    notILike: ID
+    notIn: [ID!]
+    notLike: ID
 }
 
 input IntFieldComparison {
@@ -455,8 +441,8 @@ input IntFieldComparisonBetween {
 input InventoryDeleteFilter {
     and: [InventoryDeleteFilter!]
     date: StringFieldComparison
-    id: IntFieldComparison
-    limit: NumberFieldComparison
+    id: IDFilterComparison
+    limit: IntFieldComparison
     or: [InventoryDeleteFilter!]
     restaurantId: NumberFieldComparison
     time: StringFieldComparison
@@ -465,44 +451,33 @@ input InventoryDeleteFilter {
 input InventoryFilter {
     and: [InventoryFilter!]
     date: StringFieldComparison
-    id: IntFieldComparison
-    limit: NumberFieldComparison
+    id: IDFilterComparison
+    limit: IntFieldComparison
     or: [InventoryFilter!]
-    restaurant: InventoryFilterRestaurantFilter
     restaurantId: NumberFieldComparison
     time: StringFieldComparison
 }
 
-input InventoryFilterRestaurantFilter {
-    and: [InventoryFilterRestaurantFilter!]
-    id: IntFieldComparison
-    location: StringFieldComparison
-    name: StringFieldComparison
-    or: [InventoryFilterRestaurantFilter!]
-    timezone: StringFieldComparison
-}
-
 input InventoryInput {
     date: String!
-    limit: Float!
-    restaurantId: Float!
+    limit: ID!
+    restaurantId: Int!
     time: String!
+}
+
+input InventoryRangeInput {
+    endDate: String!
+    endTime: String!
+    limit: Int!
+    restaurantId: Int!
+    startDate: String!
+    startTime: String!
 }
 
 input InventorySort {
     direction: SortDirection!
     field: InventorySortFields!
     nulls: SortNulls
-}
-
-input InventoryUpdateFilter {
-    and: [InventoryUpdateFilter!]
-    date: StringFieldComparison
-    id: IntFieldComparison
-    limit: NumberFieldComparison
-    or: [InventoryUpdateFilter!]
-    restaurantId: NumberFieldComparison
-    time: StringFieldComparison
 }
 
 input NumberFieldComparison {
@@ -529,6 +504,7 @@ input ReservationDeleteFilter {
     and: [ReservationDeleteFilter!]
     id: IntFieldComparison
     inventoryId: NumberFieldComparison
+    name: StringFieldComparison
     or: [ReservationDeleteFilter!]
     restaurantId: NumberFieldComparison
     size: NumberFieldComparison
@@ -538,26 +514,18 @@ input ReservationDeleteFilter {
 input ReservationFilter {
     and: [ReservationFilter!]
     id: IntFieldComparison
-    inventory: ReservationFilterInventoryFilter
     inventoryId: NumberFieldComparison
+    name: StringFieldComparison
     or: [ReservationFilter!]
     restaurantId: NumberFieldComparison
     size: NumberFieldComparison
     user: StringFieldComparison
 }
 
-input ReservationFilterInventoryFilter {
-    and: [ReservationFilterInventoryFilter!]
-    date: StringFieldComparison
-    id: IntFieldComparison
-    limit: NumberFieldComparison
-    or: [ReservationFilterInventoryFilter!]
-    restaurantId: NumberFieldComparison
-    time: StringFieldComparison
-}
-
 input ReservationInput {
     inventoryId: Float!
+    name: String!
+    restaurantId: Float!
     size: Float!
     user: String!
 }
@@ -566,16 +534,6 @@ input ReservationSort {
     direction: SortDirection!
     field: ReservationSortFields!
     nulls: SortNulls
-}
-
-input ReservationUpdateFilter {
-    and: [ReservationUpdateFilter!]
-    id: IntFieldComparison
-    inventoryId: NumberFieldComparison
-    or: [ReservationUpdateFilter!]
-    restaurantId: NumberFieldComparison
-    size: NumberFieldComparison
-    user: StringFieldComparison
 }
 
 input RestaurantDeleteFilter {
@@ -596,6 +554,12 @@ input RestaurantFilter {
     timezone: StringFieldComparison
 }
 
+input RestaurantInput {
+    location: String!
+    name: String!
+    timezone: String!
+}
+
 input RestaurantSort {
     direction: SortDirection!
     field: RestaurantSortFields!
@@ -609,20 +573,6 @@ input RestaurantUpdateFilter {
     name: StringFieldComparison
     or: [RestaurantUpdateFilter!]
     timezone: StringFieldComparison
-}
-
-input SetInventoryOnReservationInput {
-    "The id of the record."
-    id: Int!
-    "The id of relation."
-    relationId: Int!
-}
-
-input SetRestaurantOnInventoryInput {
-    "The id of the record."
-    id: Int!
-    "The id of relation."
-    relationId: Int!
 }
 
 input StringFieldComparison {
@@ -642,55 +592,18 @@ input StringFieldComparison {
     notLike: String
 }
 
-input UpdateManyInventoriesInput {
-    "Filter used to find fields to update"
-    filter: InventoryUpdateFilter!
-    "The update to apply to all records found using the filter"
-    update: InventoryInput!
-}
-
-input UpdateManyReservationsInput {
-    "Filter used to find fields to update"
-    filter: ReservationUpdateFilter!
-    "The update to apply to all records found using the filter"
-    update: ReservationInput!
-}
-
 input UpdateManyRestaurantsInput {
     "Filter used to find fields to update"
     filter: RestaurantUpdateFilter!
     "The update to apply to all records found using the filter"
-    update: UpdateRestaurant!
-}
-
-input UpdateOneInventoryInput {
-    "The id of the record to update"
-    id: Int!
-    "The update to apply."
-    update: InventoryInput!
-}
-
-input UpdateOneReservationInput {
-    "The id of the record to update"
-    id: Int!
-    "The update to apply."
-    update: ReservationInput!
+    update: RestaurantInput!
 }
 
 input UpdateOneRestaurantInput {
     "The id of the record to update"
     id: Int!
     "The update to apply."
-    update: UpdateRestaurant!
-}
-
-input UpdateRestaurant {
-    created: DateTime
-    id: Int
-    location: String
-    name: String
-    timezone: String
-    updated: DateTime
+    update: RestaurantInput!
 }
 
 

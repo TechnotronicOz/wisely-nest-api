@@ -19,7 +19,6 @@ import { InventoryResolver } from './inventory.resolver';
           CreateDTOClass: InventoryInputDTO,
           UpdateDTOClass: InventoryInputDTO,
           create: { disabled: true },
-          update: { disabled: true },
         },
       ],
     }),

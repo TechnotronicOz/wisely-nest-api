@@ -1,24 +1,24 @@
 version: "3.8"
 services:
-  wisely-api:
-    container_name: wisely-api
-    build:
-      context: ./api
-      target: development
-    volumes:
-    - ./api:/usr/src/app
-    - /usr/src/app/node_modules
-    ports:
-    - 3000:3000
-    - 9229:9229
-    command: npm run start:dev
-    environment:
-      NODE_ENV: development
-      WISE_HOST: "host.docker.internal"
-    networks:
-      - wisely
-    depends_on:
-      - wisely-postgres
+#  wisely-api:
+#    container_name: wisely-api
+#    build:
+#      context: ./api
+#      target: development
+#    volumes:
+#    - ./api:/usr/src/app
+#    - /usr/src/app/node_modules
+#    ports:
+#    - 3000:3000
+#    - 9229:9229
+#    command: npm run start:dev
+#    environment:
+#      NODE_ENV: development
+#      WISE_HOST: "host.docker.internal"
+#    networks:
+#      - wisely
+#    depends_on:
+#      - wisely-postgres
   wisely-postgres:
     image: postgres:13
     ports:

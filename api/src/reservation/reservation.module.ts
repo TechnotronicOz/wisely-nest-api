@@ -7,6 +7,7 @@ import { ReservationDTO } from './dto/reservation.dto';
 import { ReservationInputDTO } from './dto/reservation.input.dto';
 import { ReservationResolver } from './reservation.resolver';
 import { InventoryModule } from '../inventory/inventory.module';
+import { ReservationUpdateDTO } from './dto/reservation.update.dto';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { InventoryModule } from '../inventory/inventory.module';
           DTOClass: ReservationDTO,
           EntityClass: ReservationEntity,
           CreateDTOClass: ReservationInputDTO,
-          UpdateDTOClass: ReservationInputDTO,
+          UpdateDTOClass: ReservationUpdateDTO,
           create: { disabled: true },
           update: { disabled: true },
         },

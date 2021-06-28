@@ -1,4 +1,4 @@
-import { Mapper } from './domain-mapper';
+import { mapAttach, Mapper } from './domain-mapper';
 
 class TestEntity {
   id: number;
@@ -10,7 +10,15 @@ class TestInputDTO {
   name: string;
 }
 
-export class TestMapper extends Mapper<TestEntity, TestInputDTO> {
+class TestUpdateDTO {
+  name: string;
+}
+
+export class TestMapper extends Mapper<
+  TestEntity,
+  TestInputDTO,
+  TestUpdateDTO
+> {
   toDomain(raw: TestInputDTO): TestEntity {
     const e = new TestEntity();
     e.name = raw.name;
@@ -48,5 +56,15 @@ describe('util/domain-mapper', () => {
     e.name = 'Matt2';
     const transformedDto = m.toDTO(e);
     expect(transformedDto).toEqual(dto);
+  });
+
+  it('should mapAttach all keys from a dto object to an entity object', () => {
+    const entity = new TestEntity();
+    entity.id = 1;
+    entity.name = 'Matt';
+    const dto = new TestInputDTO();
+    dto.name = 'Matthew';
+    mapAttach<TestEntity, TestInputDTO>(entity, dto);
+    expect(entity.name).toEqual('Matthew');
   });
 });

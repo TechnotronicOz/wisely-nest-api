@@ -9,6 +9,8 @@ import { getQueryServiceToken } from '@nestjs-query/core';
 describe('InventoryResolver', () => {
   let resolver: InventoryResolver;
   let mockCreate: jest.Mock;
+  let mockCreateMany: jest.Mock;
+  let mockCreateForRange: jest.Mock;
 
   const inventory = plainToClass(InventoryEntity, {
     id: 1,
@@ -28,6 +30,8 @@ describe('InventoryResolver', () => {
 
   beforeEach(async () => {
     mockCreate = jest.fn(() => inventory);
+    mockCreateMany = jest.fn(() => inventory);
+    mockCreateForRange = jest.fn(() => inventory);
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -44,6 +48,8 @@ describe('InventoryResolver', () => {
           provide: 'InventoryService',
           useValue: {
             create: mockCreate,
+            createMany: mockCreateMany,
+            createForRange: mockCreateForRange,
           },
         },
         InventoryResolver,
@@ -69,5 +75,32 @@ describe('InventoryResolver', () => {
       }),
     ).toStrictEqual(inventory);
     expect(mockCreate).toHaveBeenCalled();
+  });
+
+  it('should call createMany to create multiple', async () => {
+    const inventory2 = plainToClass(InventoryEntity, {
+      id: 2,
+      restaurantId: 1,
+      limit: 10,
+      time: '15:30',
+      date: '2021-06-22',
+    });
+    await resolver.createManyInventories([inventory, inventory2]);
+    expect(mockCreateMany).toHaveBeenCalled();
+    expect(mockCreateMany).toHaveBeenCalledWith([inventory, inventory2]);
+  });
+
+  it('should call createForRange to create multiple', async () => {
+    const dto = {
+      restaurantId: 1,
+      limit: 5,
+      startDate: '2021-06-22',
+      startTime: '15:00',
+      endDate: '2021-06-22',
+      endTime: '19:00',
+    };
+    await resolver.createForRange(dto);
+    expect(mockCreateForRange).toHaveBeenCalled();
+    expect(mockCreateForRange).toHaveBeenCalledWith(dto);
   });
 });
