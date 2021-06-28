@@ -16,8 +16,8 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation {\n  createOneRestaurant(input:{\n    restaurant:{\n      name: \"Matt's Place\",\n      location: \"Kansas City, MO\",\n      created: \"2021-06-19 00:00:00Z\",\n      timezone: \"America/Central\",\n    }\n  }) {\n    id\n  }\n}",
-								"variables": "{\n    \"restaurant\": {\n        \"name\": \"Matt's Place\",\n        \"city\": \"Kansas City, MO\",\n        \"created\": \"2021-06-19 00:00:00Z\"\n    }\n}"
+								"query": "mutation($name: String!, $location: String!, $timezone: String!) {\n  createOneRestaurant(input:{\n    restaurant:{\n      name: $name,\n      location: $location,\n      timezone: $timezone,\n    }\n  }) {\n    id\n  }\n}",
+								"variables": "{\n    \"name\": \"Matt2's Place\",\n    \"location\": \"Kansas City, MO\",\n    \"timezone\": \"America/Central\"\n}"
 							}
 						},
 						"url": {
@@ -85,6 +85,32 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Restaurant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query($restaurantId: Int!) {\n    restaurant(id: $restaurantId) {\n        name,\n        location,\n        timezone,\n        created,\n        updated\n    }\n}",
+								"variables": "{\n    \"restaurantId\": 1\n}"
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -125,8 +151,60 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation {\n  createForRange(input: {\n    restaurantId: 1,\n    limit: 10,\n    startDate: \"2021-07-01\",\n    startTime: \"15:00\",\n    endDate: \"2021-07-01\",\n    endTime: \"20:00\"\n  }) {\n    id\n  }\n}",
+								"query": "mutation() {\n  createForRange(input: {\n    restaurantId: 1,\n    limit: 5,\n    startDate: \"2021-07-01\",\n    startTime: \"15:00\",\n    endDate: \"2021-07-01\",\n    endTime: \"20:00\"\n  }) {\n    id\n  }\n}",
 								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Inventory for Restaurant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query($restaurantId: Float!) {\n    inventories(\n        filter: {\n            restaurantId: { eq: $restaurantId },\n        }, \n        sorting: [\n            { field: date, direction: DESC },\n            { field: time, direction: DESC },\n        ]\n    ) {\n        edges {\n            node {\n                date,\n                time,\n                limit,\n            }\n        }\n    } \n}",
+								"variables": "{\n    \"restaurantId\": 1\n}"
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Inventory",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($id: ID!, $limit: Int!, $date: String!, $time: String!) {\n  updateOneInventory(input: {\n    id: $id,\n    update: {\n      limit: $limit,\n      date: $date,\n      time: $time\n    }\n  }) {\n    limit,\n    time,\n    date\n  }\n}",
+								"variables": "{\n    \"id\": 1,\n    \"limit\": 10,\n    \"date\": \"2021-06-22\",\n    \"time\": \"15:00\"\n}"
 							}
 						},
 						"url": {
@@ -156,7 +234,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation {\n  createOneReservation(createInputData: {\n    restaurantId: 1,\n    inventoryId: 1,\n    user: \"matt@mattcarter.io\",\n    name: \"Matt Carter\",\n    size: 2,\n  }) {\n    id\n  }\n}",
+								"query": "mutation {\n  createOneReservation(createInputData: {\n    restaurantId: 1,\n    inventoryId: 2,\n    user: \"matt@mattcarter.io\",\n    name: \"Matt Carter\",\n    size: 2,\n  }) {\n    id\n  }\n}",
 								"variables": ""
 							},
 							"options": {
@@ -187,13 +265,60 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation {\n  deleteOneReservation(input: {\n      id: 1\n  }) {\n      id\n  }\n}",
-								"variables": ""
-							},
-							"options": {
-								"raw": {
-									"language": "json"
-								}
+								"query": "mutation($id: Int!) {\n  deleteOneReservation(input: {\n      id: $id\n  }) {\n      id\n  }\n}",
+								"variables": "{\n    \"id\": 1\n}"
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reservations for Restaurant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query($restaurantId: Float!, $inventoryId: Float!) {\n    reservations(\n        filter: {\n            restaurantId: { eq: $restaurantId },\n            inventoryId: { eq: $inventoryId },\n        },\n        sorting: [\n            { field: size, direction: DESC }\n        ]\n    ) {\n    edges {\n      node {\n        user,\n        name,\n        inventoryId,\n        size\n      }\n    },\n  }\n}",
+								"variables": "{\n    \"restaurantId\": 1,\n    \"inventoryId\": 1\n}"
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Reservation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($id: Int!, $size: Int!) {\n  updateOneReservation(id: $id, input: {\n    size: $size\n  }) {\n    size,\n    updated\n  }\n}",
+								"variables": "{\n    \"id\": 15,\n    \"size\": 2\n}"
 							}
 						},
 						"url": {

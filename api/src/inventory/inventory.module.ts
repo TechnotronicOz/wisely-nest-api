@@ -7,6 +7,7 @@ import { InventoryDTO } from './dto/inventory.dto';
 import { RestaurantModule } from '../restaurant/restaurant.module';
 import { InventoryInputDTO } from './dto/inventory.input.dto';
 import { InventoryResolver } from './inventory.resolver';
+import { InventoryUpdateDTO } from './dto/inventory.update.dto';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { InventoryResolver } from './inventory.resolver';
           DTOClass: InventoryDTO,
           EntityClass: InventoryEntity,
           CreateDTOClass: InventoryInputDTO,
-          UpdateDTOClass: InventoryInputDTO,
+          UpdateDTOClass: InventoryUpdateDTO,
           create: { disabled: true },
         },
       ],
