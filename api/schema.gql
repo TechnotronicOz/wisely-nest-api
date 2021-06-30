@@ -1,0 +1,856 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  email: String!
+  password: String!
+  created: DateTime!
+  updated: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type DeleteManyResponse {
+  """The number of records deleted."""
+  deletedCount: Int!
+}
+
+type UserDeleteResponse {
+  id: ID
+  email: String
+  password: String
+  created: DateTime
+  updated: DateTime
+}
+
+type UpdateManyResponse {
+  """The number of records updated."""
+  updatedCount: Int!
+}
+
+type UserEdge {
+  """The node containing the User"""
+  node: User!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+"""Cursor for paging through collections"""
+scalar ConnectionCursor
+
+type PageInfo {
+  """true if paging forward and there are more records."""
+  hasNextPage: Boolean
+
+  """true if paging backwards and there are more records."""
+  hasPreviousPage: Boolean
+
+  """The cursor of the first returned record."""
+  startCursor: ConnectionCursor
+
+  """The cursor of the last returned record."""
+  endCursor: ConnectionCursor
+}
+
+type UserConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [UserEdge!]!
+}
+
+type UserAggregateGroupBy {
+  id: ID
+  created: DateTime
+  updated: DateTime
+}
+
+type UserCountAggregate {
+  id: Int
+  created: Int
+  updated: Int
+}
+
+type UserSumAggregate {
+  id: Float
+}
+
+type UserAvgAggregate {
+  id: Float
+}
+
+type UserMinAggregate {
+  id: ID
+  created: DateTime
+  updated: DateTime
+}
+
+type UserMaxAggregate {
+  id: ID
+  created: DateTime
+  updated: DateTime
+}
+
+type Inventory {
+  id: ID!
+  limit: Int!
+  date: String!
+  time: String!
+  restaurantId: Float!
+  created: DateTime!
+  updated: DateTime!
+}
+
+type Restaurant {
+  id: Int!
+  name: String!
+  location: String!
+  timezone: String!
+  created: DateTime!
+  updated: DateTime!
+}
+
+type Reservation {
+  id: Int!
+  name: String!
+  user: String!
+  size: Float!
+  restaurantId: Float!
+  inventoryId: Float!
+  created: DateTime!
+  updated: DateTime!
+}
+
+type RestaurantDeleteResponse {
+  id: Int
+  name: String
+  location: String
+  timezone: String
+  created: DateTime
+  updated: DateTime
+}
+
+type RestaurantEdge {
+  """The node containing the Restaurant"""
+  node: Restaurant!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type RestaurantConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [RestaurantEdge!]!
+}
+
+type RestaurantAggregateGroupBy {
+  id: Int
+  name: String
+  location: String
+  timezone: String
+}
+
+type RestaurantCountAggregate {
+  id: Int
+  name: Int
+  location: Int
+  timezone: Int
+}
+
+type RestaurantSumAggregate {
+  id: Float
+}
+
+type RestaurantAvgAggregate {
+  id: Float
+}
+
+type RestaurantMinAggregate {
+  id: Int
+  name: String
+  location: String
+  timezone: String
+}
+
+type RestaurantMaxAggregate {
+  id: Int
+  name: String
+  location: String
+  timezone: String
+}
+
+type InventoryDeleteResponse {
+  id: ID
+  limit: Int
+  date: String
+  time: String
+  restaurantId: Float
+  created: DateTime
+  updated: DateTime
+}
+
+type InventoryEdge {
+  """The node containing the Inventory"""
+  node: Inventory!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type InventoryConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [InventoryEdge!]!
+}
+
+type InventoryAggregateGroupBy {
+  id: ID
+  limit: Int
+  date: String
+  time: String
+  restaurantId: Float
+}
+
+type InventoryCountAggregate {
+  id: Int
+  limit: Int
+  date: Int
+  time: Int
+  restaurantId: Int
+}
+
+type InventorySumAggregate {
+  id: Float
+  limit: Float
+  restaurantId: Float
+}
+
+type InventoryAvgAggregate {
+  id: Float
+  limit: Float
+  restaurantId: Float
+}
+
+type InventoryMinAggregate {
+  id: ID
+  limit: Int
+  date: String
+  time: String
+  restaurantId: Float
+}
+
+type InventoryMaxAggregate {
+  id: ID
+  limit: Int
+  date: String
+  time: String
+  restaurantId: Float
+}
+
+type ReservationDeleteResponse {
+  id: Int
+  name: String
+  user: String
+  size: Float
+  restaurantId: Float
+  inventoryId: Float
+  created: DateTime
+  updated: DateTime
+}
+
+type ReservationEdge {
+  """The node containing the Reservation"""
+  node: Reservation!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type ReservationConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [ReservationEdge!]!
+}
+
+type ReservationAggregateGroupBy {
+  id: Int
+  name: String
+  user: String
+  size: Float
+  restaurantId: Float
+  inventoryId: Float
+}
+
+type ReservationCountAggregate {
+  id: Int
+  name: Int
+  user: Int
+  size: Int
+  restaurantId: Int
+  inventoryId: Int
+}
+
+type ReservationSumAggregate {
+  id: Float
+  size: Float
+  restaurantId: Float
+  inventoryId: Float
+}
+
+type ReservationAvgAggregate {
+  id: Float
+  size: Float
+  restaurantId: Float
+  inventoryId: Float
+}
+
+type ReservationMinAggregate {
+  id: Int
+  name: String
+  user: String
+  size: Float
+  restaurantId: Float
+  inventoryId: Float
+}
+
+type ReservationMaxAggregate {
+  id: Int
+  name: String
+  user: String
+  size: Float
+  restaurantId: Float
+  inventoryId: Float
+}
+
+type Query {
+  inventory(
+    """The id of the record to find."""
+    id: ID!
+  ): Inventory
+  inventories(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: InventoryFilter = {}
+
+    """Specify to sort results."""
+    sorting: [InventorySort!] = []
+  ): InventoryConnection!
+  restaurant(
+    """The id of the record to find."""
+    id: Int!
+  ): Restaurant
+  restaurants(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: RestaurantFilter = {}
+
+    """Specify to sort results."""
+    sorting: [RestaurantSort!] = []
+  ): RestaurantConnection!
+  reservation(
+    """The id of the record to find."""
+    id: Int!
+  ): Reservation
+  reservations(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: ReservationFilter = {}
+
+    """Specify to sort results."""
+    sorting: [ReservationSort!] = []
+  ): ReservationConnection!
+  user(
+    """The id of the record to find."""
+    id: ID!
+  ): User
+  users(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: UserFilter = {}
+
+    """Specify to sort results."""
+    sorting: [UserSort!] = []
+  ): UserConnection!
+}
+
+input CursorPaging {
+  """Paginate before opaque cursor"""
+  before: ConnectionCursor
+
+  """Paginate after opaque cursor"""
+  after: ConnectionCursor
+
+  """Paginate first"""
+  first: Int
+
+  """Paginate last"""
+  last: Int
+}
+
+input InventoryFilter {
+  and: [InventoryFilter!]
+  or: [InventoryFilter!]
+  id: IDFilterComparison
+  limit: IntFieldComparison
+  date: StringFieldComparison
+  time: StringFieldComparison
+  restaurantId: NumberFieldComparison
+}
+
+input IDFilterComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: ID
+  neq: ID
+  gt: ID
+  gte: ID
+  lt: ID
+  lte: ID
+  like: ID
+  notLike: ID
+  iLike: ID
+  notILike: ID
+  in: [ID!]
+  notIn: [ID!]
+}
+
+input IntFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: Int
+  neq: Int
+  gt: Int
+  gte: Int
+  lt: Int
+  lte: Int
+  in: [Int!]
+  notIn: [Int!]
+  between: IntFieldComparisonBetween
+  notBetween: IntFieldComparisonBetween
+}
+
+input IntFieldComparisonBetween {
+  lower: Int!
+  upper: Int!
+}
+
+input StringFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: String
+  neq: String
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  like: String
+  notLike: String
+  iLike: String
+  notILike: String
+  in: [String!]
+  notIn: [String!]
+}
+
+input NumberFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: Float
+  neq: Float
+  gt: Float
+  gte: Float
+  lt: Float
+  lte: Float
+  in: [Float!]
+  notIn: [Float!]
+  between: NumberFieldComparisonBetween
+  notBetween: NumberFieldComparisonBetween
+}
+
+input NumberFieldComparisonBetween {
+  lower: Float!
+  upper: Float!
+}
+
+input InventorySort {
+  field: InventorySortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum InventorySortFields {
+  id
+  limit
+  date
+  time
+  restaurantId
+}
+
+"""Sort Directions"""
+enum SortDirection {
+  ASC
+  DESC
+}
+
+"""Sort Nulls Options"""
+enum SortNulls {
+  NULLS_FIRST
+  NULLS_LAST
+}
+
+input RestaurantFilter {
+  and: [RestaurantFilter!]
+  or: [RestaurantFilter!]
+  id: IntFieldComparison
+  name: StringFieldComparison
+  location: StringFieldComparison
+  timezone: StringFieldComparison
+}
+
+input RestaurantSort {
+  field: RestaurantSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum RestaurantSortFields {
+  id
+  name
+  location
+  timezone
+}
+
+input ReservationFilter {
+  and: [ReservationFilter!]
+  or: [ReservationFilter!]
+  id: IntFieldComparison
+  name: StringFieldComparison
+  user: StringFieldComparison
+  size: NumberFieldComparison
+  restaurantId: NumberFieldComparison
+  inventoryId: NumberFieldComparison
+}
+
+input ReservationSort {
+  field: ReservationSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum ReservationSortFields {
+  id
+  name
+  user
+  size
+  restaurantId
+  inventoryId
+}
+
+input UserFilter {
+  and: [UserFilter!]
+  or: [UserFilter!]
+  id: IDFilterComparison
+  created: DateFieldComparison
+  updated: DateFieldComparison
+}
+
+input DateFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: DateTime
+  neq: DateTime
+  gt: DateTime
+  gte: DateTime
+  lt: DateTime
+  lte: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  between: DateFieldComparisonBetween
+  notBetween: DateFieldComparisonBetween
+}
+
+input DateFieldComparisonBetween {
+  lower: DateTime!
+  upper: DateTime!
+}
+
+input UserSort {
+  field: UserSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum UserSortFields {
+  id
+  created
+  updated
+}
+
+type Mutation {
+  createOneInventory(createInputData: InventoryInput!): Inventory!
+  createManyInventories(createInputData: [InventoryInput!]!): [Inventory!]!
+  createForRange(input: InventoryRangeInput!): [Inventory!]!
+  updateOneInventory(input: UpdateOneInventoryInput!): Inventory!
+  updateManyInventories(input: UpdateManyInventoriesInput!): UpdateManyResponse!
+  deleteOneInventory(input: DeleteOneInventoryInput!): InventoryDeleteResponse!
+  deleteManyInventories(input: DeleteManyInventoriesInput!): DeleteManyResponse!
+  createOneRestaurant(input: CreateOneRestaurantInput!): Restaurant!
+  createManyRestaurants(input: CreateManyRestaurantsInput!): [Restaurant!]!
+  updateOneRestaurant(input: UpdateOneRestaurantInput!): Restaurant!
+  updateManyRestaurants(input: UpdateManyRestaurantsInput!): UpdateManyResponse!
+  deleteOneRestaurant(input: DeleteOneRestaurantInput!): RestaurantDeleteResponse!
+  deleteManyRestaurants(input: DeleteManyRestaurantsInput!): DeleteManyResponse!
+  createOneReservation(createInputData: ReservationInput!): Reservation!
+  updateOneReservation(input: ReservationUpdate!, id: Float!): Reservation!
+  deleteOneReservation(input: DeleteOneReservationInput!): ReservationDeleteResponse!
+  deleteManyReservations(input: DeleteManyReservationsInput!): DeleteManyResponse!
+  createOneUser(input: CreateOneUserInput!): User!
+  createManyUsers(input: CreateManyUsersInput!): [User!]!
+  updateOneUser(input: UpdateOneUserInput!): User!
+  updateManyUsers(input: UpdateManyUsersInput!): UpdateManyResponse!
+  deleteOneUser(input: DeleteOneUserInput!): UserDeleteResponse!
+  deleteManyUsers(input: DeleteManyUsersInput!): DeleteManyResponse!
+}
+
+input InventoryInput {
+  limit: Int!
+  time: String!
+  date: String!
+  restaurantId: Int!
+}
+
+input InventoryRangeInput {
+  restaurantId: Int!
+  limit: Int!
+  startDate: String!
+  startTime: String!
+  endDate: String!
+  endTime: String!
+}
+
+input UpdateOneInventoryInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: InventoryUpdate!
+}
+
+input InventoryUpdate {
+  limit: Int!
+  time: String!
+  date: String!
+}
+
+input UpdateManyInventoriesInput {
+  """Filter used to find fields to update"""
+  filter: InventoryUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: InventoryUpdate!
+}
+
+input InventoryUpdateFilter {
+  and: [InventoryUpdateFilter!]
+  or: [InventoryUpdateFilter!]
+  id: IDFilterComparison
+  limit: IntFieldComparison
+  date: StringFieldComparison
+  time: StringFieldComparison
+  restaurantId: NumberFieldComparison
+}
+
+input DeleteOneInventoryInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input DeleteManyInventoriesInput {
+  """Filter to find records to delete"""
+  filter: InventoryDeleteFilter!
+}
+
+input InventoryDeleteFilter {
+  and: [InventoryDeleteFilter!]
+  or: [InventoryDeleteFilter!]
+  id: IDFilterComparison
+  limit: IntFieldComparison
+  date: StringFieldComparison
+  time: StringFieldComparison
+  restaurantId: NumberFieldComparison
+}
+
+input CreateOneRestaurantInput {
+  """The record to create"""
+  restaurant: RestaurantInput!
+}
+
+input RestaurantInput {
+  name: String!
+  location: String!
+  timezone: String!
+}
+
+input CreateManyRestaurantsInput {
+  """Array of records to create"""
+  restaurants: [RestaurantInput!]!
+}
+
+input UpdateOneRestaurantInput {
+  """The id of the record to update"""
+  id: Int!
+
+  """The update to apply."""
+  update: RestaurantInput!
+}
+
+input UpdateManyRestaurantsInput {
+  """Filter used to find fields to update"""
+  filter: RestaurantUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: RestaurantInput!
+}
+
+input RestaurantUpdateFilter {
+  and: [RestaurantUpdateFilter!]
+  or: [RestaurantUpdateFilter!]
+  id: IntFieldComparison
+  name: StringFieldComparison
+  location: StringFieldComparison
+  timezone: StringFieldComparison
+}
+
+input DeleteOneRestaurantInput {
+  """The id of the record to delete."""
+  id: Int!
+}
+
+input DeleteManyRestaurantsInput {
+  """Filter to find records to delete"""
+  filter: RestaurantDeleteFilter!
+}
+
+input RestaurantDeleteFilter {
+  and: [RestaurantDeleteFilter!]
+  or: [RestaurantDeleteFilter!]
+  id: IntFieldComparison
+  name: StringFieldComparison
+  location: StringFieldComparison
+  timezone: StringFieldComparison
+}
+
+input ReservationInput {
+  user: String!
+  name: String!
+  size: Float!
+  inventoryId: Float!
+  restaurantId: Float!
+}
+
+input ReservationUpdate {
+  size: Float!
+}
+
+input DeleteOneReservationInput {
+  """The id of the record to delete."""
+  id: Int!
+}
+
+input DeleteManyReservationsInput {
+  """Filter to find records to delete"""
+  filter: ReservationDeleteFilter!
+}
+
+input ReservationDeleteFilter {
+  and: [ReservationDeleteFilter!]
+  or: [ReservationDeleteFilter!]
+  id: IntFieldComparison
+  name: StringFieldComparison
+  user: StringFieldComparison
+  size: NumberFieldComparison
+  restaurantId: NumberFieldComparison
+  inventoryId: NumberFieldComparison
+}
+
+input CreateOneUserInput {
+  """The record to create"""
+  user: UserInput!
+}
+
+input UserInput {
+  email: String!
+  password: String!
+}
+
+input CreateManyUsersInput {
+  """Array of records to create"""
+  users: [UserInput!]!
+}
+
+input UpdateOneUserInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: UserUpdate!
+}
+
+input UserUpdate {
+  password: String!
+}
+
+input UpdateManyUsersInput {
+  """Filter used to find fields to update"""
+  filter: UserUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: UserUpdate!
+}
+
+input UserUpdateFilter {
+  and: [UserUpdateFilter!]
+  or: [UserUpdateFilter!]
+  id: IDFilterComparison
+  created: DateFieldComparison
+  updated: DateFieldComparison
+}
+
+input DeleteOneUserInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input DeleteManyUsersInput {
+  """Filter to find records to delete"""
+  filter: UserDeleteFilter!
+}
+
+input UserDeleteFilter {
+  and: [UserDeleteFilter!]
+  or: [UserDeleteFilter!]
+  id: IDFilterComparison
+  created: DateFieldComparison
+  updated: DateFieldComparison
+}

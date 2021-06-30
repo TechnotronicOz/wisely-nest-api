@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { NestFactory } from '@nestjs/core';
 import { Module } from '@nestjs/common';
-import dbConn from './config/db-conn';
+import dbConn from './config/db-conn.conf';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({

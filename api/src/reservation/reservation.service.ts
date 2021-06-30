@@ -13,11 +13,10 @@ import { InventoryService } from '../inventory/inventory.service';
 import { Mapper } from '../util/domain-mapper';
 import { ReservationMapper } from './reservation.mapper';
 import { ReservationUpdateDTO } from './dto/reservation.update.dto';
+import { OgmaLogger, OgmaService } from '@ogma/nestjs-module';
 
 @Injectable()
 export class ReservationService extends TypeOrmQueryService<ReservationEntity> {
-  private readonly logger: Logger = new Logger(ReservationService.name);
-
   private readonly mapper: Mapper<
     ReservationEntity,
     ReservationInputDTO,
@@ -27,6 +26,8 @@ export class ReservationService extends TypeOrmQueryService<ReservationEntity> {
   constructor(
     @InjectRepository(ReservationEntity)
     private readonly reservationRepo: Repository<ReservationEntity>,
+    @OgmaLogger(ReservationService)
+    private readonly logger: OgmaService,
     private readonly inventoryService: InventoryService,
   ) {
     super(reservationRepo);
@@ -66,11 +67,7 @@ export class ReservationService extends TypeOrmQueryService<ReservationEntity> {
 
     this.logger.log(`creating reservation [${JSON.stringify(createDto)}]`);
     const e = this.mapper.toDomain(createDto);
-    // typeorm bug https://github.com/typeorm/typeorm/pull/5680
-    // sql has: INSERT () VALUES () RETURNING id, created, updated;
-    const s = await this.reservationRepo.save(e);
-    this.mapper.attachId(s.id, e);
-    return e;
+    return this.saveReservation(e);
   }
 
   /**
@@ -114,6 +111,21 @@ export class ReservationService extends TypeOrmQueryService<ReservationEntity> {
     this.logger.log(`updating reservation [id=${id}, newSize=${update.size}]`);
     await this.reservationRepo.update(id, { size: update.size });
     reservation.size = update.size;
+    return reservation;
+  }
+
+  /**
+   * Monkey-patch to attach DB ID to Entity after save
+   * @param reservation
+   * @private
+   */
+  private async saveReservation(
+    reservation: ReservationEntity,
+  ): Promise<ReservationEntity> {
+    // typeorm bug https://github.com/typeorm/typeorm/pull/5680
+    // sql has: INSERT () VALUES () RETURNING id, created, updated;
+    const saved = await this.reservationRepo.save(reservation);
+    reservation.id = saved.id;
     return reservation;
   }
 

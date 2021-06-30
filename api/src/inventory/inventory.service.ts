@@ -15,12 +15,11 @@ import { RangeBuilder } from './range-builder/range-builder';
 import { InventoryRangeInputDTO } from './dto/inventory-range.input.dto';
 import { InventoryMapper } from './inventory.mapper';
 import { Mapper } from '../util/domain-mapper';
+import { OgmaLogger, OgmaService } from '@ogma/nestjs-module';
 
 @Injectable()
 @QueryService(InventoryEntity)
 export class InventoryService extends TypeOrmQueryService<InventoryEntity> {
-  private readonly logger = new Logger(InventoryService.name);
-
   private readonly mapper: Mapper<
     InventoryEntity,
     InventoryInputDTO,
@@ -30,6 +29,8 @@ export class InventoryService extends TypeOrmQueryService<InventoryEntity> {
   constructor(
     @InjectRepository(InventoryEntity)
     readonly repo: Repository<InventoryEntity>,
+    @OgmaLogger(InventoryService)
+    private readonly logger: OgmaService,
     private readonly restaurantService: RestaurantService,
   ) {
     super(repo);

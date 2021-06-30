@@ -3,14 +3,16 @@ import { InventoryDTO } from './dto/inventory.dto';
 import { InventoryEntity } from './inventory.entity';
 import { InventoryService } from './inventory.service';
 import { InventoryInputDTO } from './dto/inventory.input.dto';
-import { Logger } from '@nestjs/common';
 import { InventoryRangeInputDTO } from './dto/inventory-range.input.dto';
+import { OgmaLogger, OgmaService } from '@ogma/nestjs-module';
 
 @Resolver(() => InventoryDTO)
 export class InventoryResolver {
-  private readonly logger: Logger = new Logger(InventoryResolver.name);
-
-  constructor(private readonly inventoryService: InventoryService) {}
+  constructor(
+    @OgmaLogger(InventoryResolver)
+    private readonly logger: OgmaService,
+    private readonly inventoryService: InventoryService,
+  ) {}
 
   @Mutation(() => InventoryDTO)
   async createOneInventory(

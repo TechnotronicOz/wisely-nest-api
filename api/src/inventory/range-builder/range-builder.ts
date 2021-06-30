@@ -1,5 +1,5 @@
 import { add, format } from 'date-fns';
-import { fifteenInterval } from '../../common/time.validator';
+import { fifteenInterval } from '../../validators/time.validator';
 import { Logger } from '@nestjs/common';
 
 const MAX_COMPLEXITY = 200; // hard limit of 200 record per request

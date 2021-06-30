@@ -5,6 +5,7 @@ import { NestjsQueryTypeOrmModule } from '@nestjs-query/query-typeorm';
 import { RestaurantEntity } from './restaurant.entity';
 import { RestaurantDTO } from './dto/restaurant.dto';
 import { RestaurantInputDTO } from './dto/restaurant.input.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RestaurantInputDTO } from './dto/restaurant.input.dto';
           EntityClass: RestaurantEntity,
           CreateDTOClass: RestaurantInputDTO,
           UpdateDTOClass: RestaurantInputDTO,
+          guards: [JwtAuthGuard],
         },
       ],
     }),

@@ -8,6 +8,8 @@ import { RestaurantModule } from '../restaurant/restaurant.module';
 import { InventoryInputDTO } from './dto/inventory.input.dto';
 import { InventoryResolver } from './inventory.resolver';
 import { InventoryUpdateDTO } from './dto/inventory.update.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { OgmaModule } from '@ogma/nestjs-module';
 
 @Module({
   imports: [
@@ -20,9 +22,11 @@ import { InventoryUpdateDTO } from './dto/inventory.update.dto';
           CreateDTOClass: InventoryInputDTO,
           UpdateDTOClass: InventoryUpdateDTO,
           create: { disabled: true },
+          guards: [JwtAuthGuard],
         },
       ],
     }),
+    OgmaModule.forFeatures([InventoryService, InventoryResolver]),
     RestaurantModule,
   ],
   providers: [InventoryService, InventoryResolver, InventoryEntity],

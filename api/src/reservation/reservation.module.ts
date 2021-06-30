@@ -8,6 +8,7 @@ import { ReservationInputDTO } from './dto/reservation.input.dto';
 import { ReservationResolver } from './reservation.resolver';
 import { InventoryModule } from '../inventory/inventory.module';
 import { ReservationUpdateDTO } from './dto/reservation.update.dto';
+import { OgmaModule } from '@ogma/nestjs-module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ReservationUpdateDTO } from './dto/reservation.update.dto';
         },
       ],
     }),
+    OgmaModule.forFeatures([ReservationService, ReservationResolver]),
   ],
   providers: [ReservationService, ReservationResolver, ReservationEntity],
   exports: [ReservationEntity, ReservationService],

@@ -5,12 +5,15 @@ import { ReservationService } from './reservation.service';
 import { ReservationInputDTO } from './dto/reservation.input.dto';
 import { Logger } from '@nestjs/common';
 import { ReservationUpdateDTO } from './dto/reservation.update.dto';
+import { OgmaLogger, OgmaService } from '@ogma/nestjs-module';
 
 @Resolver(() => ReservationDTO)
 export class ReservationResolver {
-  private readonly logger: Logger = new Logger(ReservationResolver.name);
-
-  constructor(private readonly reservationService: ReservationService) {}
+  constructor(
+    @OgmaLogger(ReservationResolver)
+    private readonly logger: OgmaService,
+    private readonly reservationService: ReservationService,
+  ) {}
 
   @Mutation(() => ReservationDTO)
   async createOneReservation(
