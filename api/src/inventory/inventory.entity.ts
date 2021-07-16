@@ -1,22 +1,11 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
-  OneToMany,
-  Index,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, Index } from 'typeorm';
 import { RestaurantEntity } from '../restaurant/restaurant.entity';
 import { ReservationEntity } from '../reservation/reservation.entity';
+import { BaseDBEntity } from '../common/entities/base.entity';
 
-@Entity()
+@Entity('inventory')
 @Index(['restaurantId', 'date', 'time'], { unique: true })
-export class InventoryEntity {
-  @PrimaryGeneratedColumn({ type: 'bigint' })
-  id?: number;
-
+export class InventoryEntity extends BaseDBEntity {
   @Column({ nullable: false })
   limit!: number;
 
@@ -29,15 +18,6 @@ export class InventoryEntity {
   @Column({ nullable: false })
   restaurantId!: number;
 
-  @CreateDateColumn({ nullable: false, type: 'timestamp without time zone' })
-  created!: Date;
-
-  @UpdateDateColumn({
-    type: 'timestamp without time zone',
-    nullable: true,
-  })
-  updated: Date;
-
   @ManyToOne(() => RestaurantEntity, (restaurant) => restaurant.inventories, {
     onDelete: 'CASCADE',
     nullable: false,
@@ -49,4 +29,12 @@ export class InventoryEntity {
     nullable: false,
   })
   reservations: ReservationEntity[];
+
+  // constructor(limit: number, date: string, time: string, restaurantId: number) {
+  //   super();
+  //   this.limit = limit;
+  //   this.date = date;
+  //   this.time = time;
+  //   this.restaurantId = restaurantId;
+  // }
 }

@@ -8,7 +8,7 @@ describe('ReservationMapper', () => {
     e.restaurantId = 1;
     e.inventoryId = 1;
     e.name = 'Matt';
-    e.user = 'matt@mattcarter.io';
+    e.emaill = 'matt@mattcarter.io';
     e.size = 2;
 
     const dto = new ReservationInputDTO();
@@ -24,7 +24,7 @@ describe('ReservationMapper', () => {
     expect(mappedEntity.restaurantId).toEqual(dto.restaurantId);
     expect(mappedEntity.inventoryId).toEqual(dto.inventoryId);
     expect(mappedEntity.name).toEqual(dto.name);
-    expect(mappedEntity.user).toEqual(dto.user);
+    expect(mappedEntity.emaill).toEqual(dto.user);
     expect(mappedEntity.size).toEqual(dto.size);
   });
 
@@ -33,7 +33,7 @@ describe('ReservationMapper', () => {
     e.restaurantId = 1;
     e.inventoryId = 1;
     e.name = 'Matt';
-    e.user = 'matt@mattcarter.io';
+    e.emaill = 'matt@mattcarter.io';
     e.size = 2;
 
     const dto = new ReservationInputDTO();
@@ -47,7 +47,7 @@ describe('ReservationMapper', () => {
     const mappedDto = m.toDTO(e);
     expect(mappedDto.restaurantId).toEqual(e.restaurantId);
     expect(mappedDto.inventoryId).toEqual(e.inventoryId);
-    expect(mappedDto.user).toEqual(e.user);
+    expect(mappedDto.user).toEqual(e.emaill);
     expect(mappedDto.name).toEqual(e.name);
     expect(mappedDto.size).toEqual(e.size);
   });
@@ -56,7 +56,7 @@ describe('ReservationMapper', () => {
     const e = new ReservationEntity();
     e.restaurantId = 1;
     e.restaurantId = 1;
-    e.user = 'matt@mattcarter.io';
+    e.emaill = 'matt@mattcarter.io';
     e.name = 'Matt';
     e.size = 2;
 

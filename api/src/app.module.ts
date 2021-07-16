@@ -14,12 +14,15 @@ import loggingConf from './config/logging.conf';
 import { OgmaInterceptor, OgmaModule, OgmaService } from '@ogma/nestjs-module';
 import { ExpressParser } from '@ogma/platform-express';
 import { GraphQLParser } from '@ogma/platform-graphql';
+import { SnakeNamingStrategy } from './util/db-snake-naming-strategy';
+import { TimeoutInterceptor } from './common/timeout.interceptor';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
       autoLoadEntities: true,
+      namingStrategy: new SnakeNamingStrategy(),
       ...dbConf,
     }),
     GraphQLModule.forRoot({
@@ -50,6 +53,9 @@ import { GraphQLParser } from '@ogma/platform-graphql';
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [{ provide: APP_INTERCEPTOR, useClass: OgmaInterceptor }],
+  providers: [
+    { provide: APP_INTERCEPTOR, useClass: OgmaInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: TimeoutInterceptor },
+  ],
 })
 export class AppModule {}

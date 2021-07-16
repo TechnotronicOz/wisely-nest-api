@@ -10,7 +10,7 @@ export class ReservationDTO {
   name?: string;
 
   @FilterableField()
-  user!: string;
+  email!: string;
 
   @FilterableField()
   size!: number;

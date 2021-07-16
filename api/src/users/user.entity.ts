@@ -1,33 +1,17 @@
-import {
-  BeforeInsert,
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { Role } from './roles/role.enum';
+import { BeforeInsert, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { hashPass } from '../util/passwords';
+import { BaseDBEntity } from '../common/entities/base.entity';
+import { RestaurantEntity } from '../restaurant/restaurant.entity';
+import { ReservationEntity } from '../reservation/reservation.entity';
+import { OmitType } from '@nestjs/graphql';
 
-@Entity('user')
-export class UserEntity {
-  @PrimaryGeneratedColumn({ type: 'bigint' })
-  id: number;
-
+@Entity('user_store')
+export class UserEntity extends BaseDBEntity {
   @Column({ unique: true })
   email: string;
 
   @Column()
   password: string;
-
-  @Column({ default: Role.User })
-  role: Role;
-
-  @CreateDateColumn()
-  created: Date;
-
-  @UpdateDateColumn({ nullable: true })
-  updated?: Date;
 
   @BeforeInsert()
   async hashPassword(): Promise<string> {
@@ -35,9 +19,28 @@ export class UserEntity {
     return this.password;
   }
 
-  @BeforeInsert()
-  setUserRole(): string {
-    this.role = Role.User;
-    return this.role;
+  @OneToMany(() => RestaurantEntity, (restaurant) => restaurant.user, {
+    onDelete: 'CASCADE',
+  })
+  restaurants?: RestaurantEntity[];
+
+  @OneToMany(() => ReservationEntity, (reservation) => reservation.user, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
+  reservations?: ReservationEntity[];
+
+  // constructor(email: string, password: string) {
+  //   super();
+  //   this.email = email;
+  //   this.password = password;
+  // }
+
+  asUserWithoutSecrets(): UserWithoutSecrets {
+    return this as UserWithoutSecrets;
   }
 }
+
+type UserKeys = keyof UserEntity;
+type UserKeysWithoutSecrets = Exclude<UserKeys, 'password'>;
+export type UserWithoutSecrets = Pick<UserEntity, UserKeysWithoutSecrets>;

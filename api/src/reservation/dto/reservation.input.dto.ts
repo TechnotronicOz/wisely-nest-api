@@ -17,7 +17,7 @@ import { RestaurantDTO } from '../../restaurant/dto/restaurant.dto';
 export class ReservationInputDTO {
   @Field()
   @IsEmail()
-  user!: string;
+  email!: string;
 
   @Field()
   @IsString()

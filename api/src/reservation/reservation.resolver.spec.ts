@@ -75,7 +75,7 @@ describe('InventoryResolver', () => {
       restaurantId: reservation.restaurantId,
       name: reservation.name,
       size: reservation.size,
-      user: reservation.user,
+      user: reservation.emaill,
       inventoryId: reservation.inventoryId,
     };
     expect(await resolver.createOneReservation(createDto)).toEqual(reservation);
@@ -86,7 +86,7 @@ describe('InventoryResolver', () => {
   it('should call update on reservation service to update reservation record', async () => {
     const otherReservation = new ReservationEntity();
     otherReservation.id = 2;
-    otherReservation.user = 'matt@mattcarter.io';
+    otherReservation.emaill = 'matt@mattcarter.io';
     otherReservation.name = 'Matt';
     otherReservation.size = 4;
     otherReservation.restaurantId = 1;

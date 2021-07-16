@@ -1,26 +1,19 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
-  JoinTable,
-  Index,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, JoinTable, Index } from 'typeorm';
 import { InventoryEntity } from '../inventory/inventory.entity';
 import { RestaurantEntity } from '../restaurant/restaurant.entity';
+import { BaseDBEntity } from '../common/entities/base.entity';
+import { UserEntity } from '../users/user.entity';
 
-@Entity()
-export class ReservationEntity {
-  @PrimaryGeneratedColumn({ type: 'bigint' })
-  id!: number;
-
+@Entity('reservation')
+@Index(['user'])
+@Index(['restaurantId'])
+@Index(['inventoryId'])
+export class ReservationEntity extends BaseDBEntity {
   @Column()
   name: string;
 
   @Column()
-  user: string;
+  email: string;
 
   @Column()
   size: number;
@@ -31,12 +24,6 @@ export class ReservationEntity {
   @Column()
   inventoryId: number;
 
-  @CreateDateColumn({ type: 'timestamp without time zone' })
-  created!: Date;
-
-  @UpdateDateColumn({ type: 'timestamp without time zone', nullable: true })
-  updated: Date;
-
   @JoinTable()
   @ManyToOne(() => RestaurantEntity, (restaurant) => restaurant.inventories)
   restaurant: RestaurantEntity;
@@ -44,4 +31,22 @@ export class ReservationEntity {
   @JoinTable()
   @ManyToOne(() => InventoryEntity, (inventory) => inventory.reservations)
   inventory: InventoryEntity;
+
+  @ManyToOne(() => UserEntity, (user) => user.reservations)
+  user: UserEntity;
+
+  // constructor(opts: NewReservation) {
+  //   super();
+  //   Object.keys(opts).forEach((k) => {
+  //     this[k] = opts[k];
+  //   });
+  // }
+}
+
+export interface NewReservation {
+  name: string;
+  email: string;
+  size: number;
+  restaurantId: number;
+  inventoryId: number;
 }

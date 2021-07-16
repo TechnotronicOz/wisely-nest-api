@@ -16,7 +16,12 @@ import { Request, Response } from 'express';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: jwtConstants.expiresIn },
     }),
-    OgmaModule.forFeature(AuthService),
+    OgmaModule.forFeatures([
+      AuthService,
+      AuthController,
+      LocalStrategy,
+      JwtStrategy,
+    ]),
     UsersModule,
     PassportModule,
   ],

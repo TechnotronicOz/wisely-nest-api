@@ -109,7 +109,7 @@ describe('ReservationService', () => {
     const b = await service.createOne(reservationRaw);
     expect(b).toBeInstanceOf(ReservationEntity);
     expect(b.size).toBe(reservationRaw.size);
-    expect(b.user).toBe(reservationRaw.user);
+    expect(b.emaill).toBe(reservationRaw.user);
     expect(b.inventoryId).toBe(reservationRaw.inventoryId);
     expect(inventoryService.findById).toHaveBeenCalled();
     expect(repo.find).toHaveBeenCalled();
@@ -266,7 +266,7 @@ describe('ReservationService', () => {
       expect(reservation).toBeInstanceOf(ReservationEntity);
       expect(reservation.id).toEqual(2);
       expect(reservation.size).toEqual(newReservation2.size);
-      expect(reservation.user).toEqual(newReservation2.user);
+      expect(reservation.emaill).toEqual(newReservation2.user);
       expect(reservation.inventoryId).toEqual(newReservation2.inventoryId);
       expect(reservation.restaurantId).toEqual(newReservation2.restaurantId);
       expect(repo.save).toHaveBeenCalled();
@@ -277,7 +277,7 @@ describe('ReservationService', () => {
     const reservation = new ReservationEntity();
     reservation.id = 1;
     reservation.name = 'Matt';
-    reservation.user = 'matt@mattcarter.io';
+    reservation.emaill = 'matt@mattcarter.io';
     reservation.size = 2;
     reservation.restaurantId = 1;
     reservation.inventoryId = 1;

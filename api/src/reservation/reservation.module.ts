@@ -9,6 +9,7 @@ import { ReservationResolver } from './reservation.resolver';
 import { InventoryModule } from '../inventory/inventory.module';
 import { ReservationUpdateDTO } from './dto/reservation.update.dto';
 import { OgmaModule } from '@ogma/nestjs-module';
+import { ReservationController } from './reservation.controller';
 
 @Module({
   imports: [
@@ -26,9 +27,14 @@ import { OgmaModule } from '@ogma/nestjs-module';
         },
       ],
     }),
-    OgmaModule.forFeatures([ReservationService, ReservationResolver]),
+    OgmaModule.forFeatures([
+      ReservationService,
+      ReservationController,
+      ReservationResolver,
+    ]),
   ],
   providers: [ReservationService, ReservationResolver, ReservationEntity],
   exports: [ReservationEntity, ReservationService],
+  controllers: [ReservationController],
 })
 export class ReservationModule {}

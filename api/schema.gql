@@ -120,7 +120,7 @@ type Restaurant {
 type Reservation {
   id: Int!
   name: String!
-  user: String!
+  email: String!
   size: Float!
   restaurantId: Float!
   inventoryId: Float!
@@ -262,7 +262,7 @@ type InventoryMaxAggregate {
 type ReservationDeleteResponse {
   id: Int
   name: String
-  user: String
+  email: String
   size: Float
   restaurantId: Float
   inventoryId: Float
@@ -289,7 +289,7 @@ type ReservationConnection {
 type ReservationAggregateGroupBy {
   id: Int
   name: String
-  user: String
+  email: String
   size: Float
   restaurantId: Float
   inventoryId: Float
@@ -298,7 +298,7 @@ type ReservationAggregateGroupBy {
 type ReservationCountAggregate {
   id: Int
   name: Int
-  user: Int
+  email: Int
   size: Int
   restaurantId: Int
   inventoryId: Int
@@ -321,7 +321,7 @@ type ReservationAvgAggregate {
 type ReservationMinAggregate {
   id: Int
   name: String
-  user: String
+  email: String
   size: Float
   restaurantId: Float
   inventoryId: Float
@@ -330,7 +330,7 @@ type ReservationMinAggregate {
 type ReservationMaxAggregate {
   id: Int
   name: String
-  user: String
+  email: String
   size: Float
   restaurantId: Float
   inventoryId: Float
@@ -546,7 +546,7 @@ input ReservationFilter {
   or: [ReservationFilter!]
   id: IntFieldComparison
   name: StringFieldComparison
-  user: StringFieldComparison
+  email: StringFieldComparison
   size: NumberFieldComparison
   restaurantId: NumberFieldComparison
   inventoryId: NumberFieldComparison
@@ -561,7 +561,7 @@ input ReservationSort {
 enum ReservationSortFields {
   id
   name
-  user
+  email
   size
   restaurantId
   inventoryId
@@ -762,7 +762,7 @@ input RestaurantDeleteFilter {
 }
 
 input ReservationInput {
-  user: String!
+  email: String!
   name: String!
   size: Float!
   inventoryId: Float!
@@ -788,7 +788,7 @@ input ReservationDeleteFilter {
   or: [ReservationDeleteFilter!]
   id: IntFieldComparison
   name: StringFieldComparison
-  user: StringFieldComparison
+  email: StringFieldComparison
   size: NumberFieldComparison
   restaurantId: NumberFieldComparison
   inventoryId: NumberFieldComparison

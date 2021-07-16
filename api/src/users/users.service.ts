@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import { OgmaLogger, OgmaService } from '@ogma/nestjs-module';
 import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
@@ -14,11 +13,19 @@ export class UsersService {
     private readonly repo: Repository<UserEntity>,
   ) {}
 
-  async findOne(username: string): Promise<UserEntity | undefined> {
-    return await this.repo.findOneOrFail({
+  async findByEmail(email: string): Promise<UserEntity | undefined> {
+    this.logger.log(`looking up user [email=${email}]`);
+    const user = await this.repo.findOne({
       where: {
-        email: username,
+        email,
       },
     });
+    if (!user) {
+      this.logger.error(`no user found [email=${email}]`);
+      throw new Error('no user found!');
+    }
+
+    this.logger.log(`found user [email=${email}, id=${user.id}]`);
+    return user;
   }
 }

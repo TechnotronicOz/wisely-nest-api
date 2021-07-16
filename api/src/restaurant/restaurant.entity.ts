@@ -1,21 +1,13 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  OneToMany,
-  Index,
-} from 'typeorm';
+import { Column, Entity, OneToMany, Index, ManyToOne } from 'typeorm';
 import { InventoryEntity } from '../inventory/inventory.entity';
 import { ReservationEntity } from '../reservation/reservation.entity';
+import { BaseDBEntity } from '../common/entities/base.entity';
+import { Int } from '@nestjs/graphql';
+import { UserEntity } from '../users/user.entity';
 
-@Entity()
+@Entity('restaurant')
 @Index(['name', 'location'], { unique: true })
-export class RestaurantEntity {
-  @PrimaryGeneratedColumn({ type: 'bigint' })
-  id!: number;
-
+export class RestaurantEntity extends BaseDBEntity {
   @Column()
   name: string;
 
@@ -25,11 +17,8 @@ export class RestaurantEntity {
   @Column({ default: 'America/Central' })
   timezone: string;
 
-  @CreateDateColumn({ type: 'timestamp without time zone' })
-  created!: Date;
-
-  @UpdateDateColumn({ type: 'timestamp without time zone', nullable: true })
-  updated: Date;
+  @Column()
+  userId: number;
 
   @OneToMany(() => ReservationEntity, (reservation) => reservation.restaurant, {
     onDelete: 'CASCADE',
@@ -40,4 +29,20 @@ export class RestaurantEntity {
     onDelete: 'CASCADE',
   })
   inventories: InventoryEntity[];
+
+  @ManyToOne(() => UserEntity, (user) => user.restaurants)
+  user: UserEntity;
+
+  // constructor(
+  //   name: string,
+  //   location: string,
+  //   timezone: string,
+  //   userId: number,
+  // ) {
+  //   super();
+  //   this.name = name;
+  //   this.location = location;
+  //   this.timezone = timezone;
+  //   this.userId = userId;
+  // }
 }

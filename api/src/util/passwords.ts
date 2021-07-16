@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
  * @param password
  */
 export async function hashPass(password: string): Promise<string> {
-  return await bcrypt.hash(password, await bcrypt.genSalt());
+  return await bcrypt.hash(password, 10);
 }
 
 /**
@@ -17,5 +17,5 @@ export async function comparePassToHash(
   password: string,
   hash: string,
 ): Promise<boolean> {
-  return bcrypt.compare(password, hash);
+  return await bcrypt.compare(password, hash);
 }

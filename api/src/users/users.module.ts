@@ -7,9 +7,11 @@ import { UserDTO } from './dto/user.dto';
 import { UserInputDTO } from './dto/user.input.dto';
 import { OgmaModule } from '@ogma/nestjs-module';
 import { UserUpdateDTO } from './dto/user.update.dto';
+import { UsersResolver } from './users.resolver';
+import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 
 @Module({
-  providers: [UsersService, UserEntity],
+  providers: [UsersService, UserEntity, UsersResolver],
   exports: [UsersService],
   imports: [
     NestjsQueryGraphQLModule.forFeature({
@@ -20,10 +22,11 @@ import { UserUpdateDTO } from './dto/user.update.dto';
           EntityClass: UserEntity,
           CreateDTOClass: UserInputDTO,
           UpdateDTOClass: UserUpdateDTO,
+          guards: [GqlAuthGuard],
         },
       ],
     }),
-    OgmaModule.forFeature(UsersService),
+    OgmaModule.forFeatures([UsersService, UsersResolver]),
   ],
 })
 export class UsersModule {}

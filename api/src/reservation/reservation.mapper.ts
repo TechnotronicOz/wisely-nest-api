@@ -20,7 +20,7 @@ export class ReservationMapper extends Mapper<
       restaurantId: t.restaurantId,
       inventoryId: t.inventoryId,
       name: t.name,
-      user: t.user,
+      email: t.email,
       size: t.size,
     };
   }
