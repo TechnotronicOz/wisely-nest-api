@@ -27,7 +27,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@date-io/date-fns": "2.10.11",
+    "@date-io/date-fns": "2.17.0",
     "@nestjs-query/core": "0.27.0",
     "@nestjs-query/query-graphql": "0.27.0",
     "@nestjs-query/query-typeorm": "0.27.0",
